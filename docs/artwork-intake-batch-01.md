@@ -26,7 +26,7 @@ Originals are preserved byte for byte in `assets/originals/batch-01-characters-p
 - ZIP CRC integrity check passed. All expected pages 1–14 are present, with no duplicate filenames.
 - All files passed PNG verification and full pixel decoding. Each is 2000 × 2000 RGBA with transparent padding. Visual inspection of all 14 mapped images agrees with the supplied mapping.
 - Curved ledges beneath the characters' hands are present and preserved. Later boat composition must support configurable rim layering or masking without altering originals. Content bounds in the manifest describe existing nontransparent pixels, not an applied crop.
-- One additional file, **159.png**, is a valid 2000 × 2000 RGBA PNG whose alpha is zero everywhere: it has no visible artwork. It has no authoritative mapping. Preserve it as an excluded, unmapped extra; do not assign a character, pose, or gameplay meaning.
+- The ZIP also contained **159.png**, a fully transparent unmapped extra. It was initially preserved, then **removed from the checkout and active manifest at the creator's explicit request during Batch 2 intake**. Pages 1–14 remain unchanged. Historical commits retain the earlier intake record.
 - No corruption or missing expected images was found. No source file approaches GitHub's individual-file size limit.
 
 The creator supplied these as official project artwork; no separate redistribution licence was supplied. This intake does not infer one.
