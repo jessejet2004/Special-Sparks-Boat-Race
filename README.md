@@ -2,6 +2,8 @@
 
 Boat Race development repository. The implementation has not started yet.
 
+The creator's [Version 1 design brief](docs/boat-race-design-brief-v1.md) and [development proposal](docs/boat-race-development-proposal.md) are saved in this repository. Stage 1 awaits creator approval and the first official artwork ZIP; no game code or substitute artwork has been created.
+
 ## Restore from GitHub
 
 Prerequisite: Git and access to this GitHub repository.
