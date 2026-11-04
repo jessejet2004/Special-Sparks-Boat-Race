@@ -38,7 +38,7 @@ Keep official source artwork unchanged in `assets/originals/`, and generated or 
 
 [Batch 5 intake](docs/artwork-intake-batch-05.md) adds the seven official boats and their seven matching fallen pieces, pages 57–70. Seating and optional-effect requirements are documented; no game effects are implemented. The flying saucer is excluded.
 
-[Batch 6 intake](docs/artwork-intake-batch-06.md) adds the 14 official equipment illustrations on pages 71–84, in propulsion/movement and flotation/stability/survival groups. Gameplay definitions and remaining equipment inventory are still pending.
+[Batch 6 intake](docs/artwork-intake-batch-06.md) adds equipment pages 71–84; [Batch 7 intake](docs/artwork-intake-batch-07.md) adds pages 85–98. All 28 official equipment illustrations are now imported in four groups of seven. Gameplay definitions and integration remain pending; creator interaction suggestions are documented without implemented mechanics.
 
 ## Complete a development stage
 

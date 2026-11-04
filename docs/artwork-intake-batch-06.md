@@ -36,7 +36,7 @@ Boat-specific attachment positions, scale, rotation and draw order must remain c
 
 The creator's examples are creative directions only: Helpful Duck could offer steady propulsion but get distracted; Fizzy Bottle Engine could offer strong temporary acceleration; Bottle Outriggers could trade drag for stability; Super Sponge could absorb water then become waterlogged; Bouncy Spring could absorb impacts while introducing unpredictable movement. No numerical values, combination rules, or mechanics are finalised or implemented by this intake. Not every part must be beneficial, and usefulness may vary by challenge.
 
-This batch provides 14 of the brief's planned 28 equipment illustrations. Await the remaining authoritative inventory rather than filling gaps with invented names or parts.
+This batch provides the first 14 of the 28 equipment illustrations. The remaining authoritative inventory has since arrived in [Batch 7](artwork-intake-batch-07.md), completing pages 71–98. No invented names or parts are needed.
 
 ## Development hold
 
