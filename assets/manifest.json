@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "description": "No artwork has been imported. Preserve official originals byte for byte and register each asset before use.",
+  "originals_directory": "assets/originals/",
+  "derivatives_directory": "assets/derived/",
+  "required_asset_fields": [
+    "id",
+    "path",
+    "kind",
+    "source",
+    "rights",
+    "sha256"
+  ],
+  "asset_guidance": {
+    "kind": "original or derivative",
+    "source": "Original provider and source reference; derivatives also identify their source asset ID and transformation.",
+    "rights": "Known license or permission and attribution requirements; record unknown rights explicitly.",
+    "sha256": "SHA-256 checksum of the tracked file bytes."
+  },
+  "assets": []
+}
