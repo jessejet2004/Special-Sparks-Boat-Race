@@ -1,0 +1,27 @@
+{
+  "name": "very-serious-boat-race",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "assets": "node scripts/prepare-assets.mjs",
+    "dev": "npm run assets && vite --host 0.0.0.0",
+    "build": "npm run assets && tsc --noEmit && vite build && node scripts/offline.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run",
+    "test:browser": "playwright test",
+    "audit:artwork": "python3 scripts/audit-artwork.py",
+    "portable": "npm run build && python3 scripts/package-portable.py"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1",
+    "@types/node": "24.10.1",
+    "sharp": "0.34.5",
+    "typescript": "5.9.3",
+    "vite": "7.2.2",
+    "vitest": "4.0.9"
+  }
+}

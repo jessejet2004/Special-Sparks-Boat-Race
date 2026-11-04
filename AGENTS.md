@@ -2,7 +2,7 @@
 
 These rules apply to every development stage, including Boat Race.
 
-Current creator instruction: intake official artwork only. Do not implement the game or developer gallery until all batches are uploaded and the creator gives the final instruction. The first artwork upload alone does not authorise implementation.
+Current creator instruction: the complete playable game is authorised. Work autonomously through the approved stages, testing, committing and pushing each completed stage. Preserve all original artwork.
 
 - Keep all game source, artwork configuration, tests, and documentation in this repository. Do not depend on a conversation, cloud snapshot, or files outside the checkout for completed work.
 - Use the existing checkout. Each cloud task is isolated; do not create a worktree unless explicitly requested.

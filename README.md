@@ -1,8 +1,8 @@
 # Homeroom
 
-Boat Race development repository. The implementation has not started yet.
+Boat Race development repository. Full playable implementation is authorised and being built in verified stages.
 
-The creator's [Version 1 design brief](docs/boat-race-design-brief-v1.md) and [development proposal](docs/boat-race-development-proposal.md) are saved in this repository. The original artwork batches are now imported; the creator requested the final audit and backup report before proceeding with implementation. No game code or substitute artwork has been created.
+The creator's [Version 1 design brief](docs/boat-race-design-brief-v1.md) and [development proposal](docs/boat-race-development-proposal.md) are saved in this repository. The original artwork batches are now imported; the creator requested the final audit and backup report before proceeding with implementation. Official artwork is used throughout; see development commands below.
 
 ## Restore from GitHub
 
@@ -19,16 +19,20 @@ git status --short
 
 ## Installation, development, build, and tests
 
-Currently this repository contains workflow documentation, an asset manifest, and imported official artwork. There are no application dependencies to install, development server to start, build command, or game tests to run. Boat Race implementation must add the exact commands, tool versions, dependency lockfiles, and required non-secret configuration here before its first stage is completed.
-
-The current manifest can be validated with Python 3:
+Use Node 24.22.1 (see `.nvmrc`), npm 11.9.0 and Python 3.9+ for the source-art audit. Browser tests use Chromium (`/usr/bin/chromium` by default); set `CHROMIUM_PATH` for another installed Chromium executable.
 
 ```sh
-python3 -m json.tool assets/manifest.json
-git diff --check
+npm ci
+npm run dev
+npm test
+npm run build
+npm run test:browser
+python3 scripts/audit-artwork.py
 ```
 
-No credentials or external services are required for the current repository contents. GitHub authentication is required to fetch and push private repository content; supply it through the host's secure authentication mechanism, never committed files.
+The developer composition gallery is at `/gallery.html`. `npm run assets` verifies source hashes and generates cropped, resized WebP runtime copies plus their source mapping in `public/art/`. Originals are never modified. Generated copies are reproducible and ignored in Git; the build includes them automatically. Save gallery placement exports into `src/artwork/config.ts` to preserve adjustments.
+
+The production output is `dist/`; serve with `npm run preview`. No game credentials or external APIs are required. All artwork is served locally. Offline installation and portable packaging are added in the release stage.
 
 ## Artwork
 
