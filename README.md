@@ -46,6 +46,8 @@ Keep official source artwork unchanged in `assets/originals/`, and generated or 
 
 [Batch 10 intake](docs/artwork-intake-batch-10.md) adds Slowest Race and Wobbly Waters assets on pages 127–140. Page 133 has an opaque white backing flagged for transparent re-export. Challenge camera and configurable movement directions are documented; implementation is still on hold.
 
+[Batch 11 intake](docs/artwork-intake-batch-11.md) adds Picnic Panic and supporting effects on pages 141–154. Page 154 has an opaque white backing flagged for transparent re-export. Main lake, Boat Room and celebration backgrounds and final implementation authorisation are still pending.
+
 ## Complete a development stage
 
 Follow [AGENTS.md](AGENTS.md). Run the stage's checks, review and commit its changes, then push the current branch to GitHub. Report the branch, full commit ID, and actual push outcome. Confirm the remote branch points to the pushed commit with `git ls-remote origin refs/heads/work`. Failed pushes must be reported immediately; local commits alone are not a GitHub backup.
