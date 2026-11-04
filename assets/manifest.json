@@ -4228,6 +4228,102 @@
       "composition_notes": "Keep placement, scale, layering and lightweight animation configurable, separately from gameplay mechanics. Decorative art does not imply collision or gameplay effects.",
       "design_notes": "Use selectively; creator examples are possible uses, not mandatory events or final rules.",
       "inspection_notes": "Opaque white vertical rectangle behind fish within transparent canvas. Preserved unchanged; transparent re-export recommended. Content bounds include backing."
+    },
+    {
+      "id": "background.lake",
+      "path": "assets/originals/batch-12-backgrounds/lake-background.png",
+      "kind": "original",
+      "source": "Official creator-supplied PNG: backgrounds.zip",
+      "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
+      "sha256": "c72d8637105a56d10c671ebc328d9c4704da2250049496cac9958fc4228ea32f",
+      "batch_id": "batch-12",
+      "original_filename": "lake-background.png",
+      "width": 2900,
+      "height": 1000,
+      "mode": "RGB",
+      "has_transparency": false,
+      "content_bounds_px": [
+        0,
+        0,
+        2900,
+        1000
+      ],
+      "status": "mapped",
+      "usage": "scene-background",
+      "name": "Lake Background",
+      "presentation": {
+        "source_rect_px": [
+          0,
+          17,
+          2900,
+          966
+        ],
+        "fit": "cover-preserve-aspect",
+        "repeat": "none",
+        "horizontal_pan": "bounded-normalised-progress",
+        "pan_range": "available source width after aspect-preserving viewport crop; clamp at both edges",
+        "world_camera_independent": true,
+        "reduced_motion": "fixed background crop"
+      },
+      "composition_notes": "Foundation for all four challenges; overlay scenery, boats and encounters in independent world layers. Crop the measured white strips only at render time. Uniform scale; no course-length stretching, wrapping, mirrored repetition or edge-to-edge tiling. Map backdrop pan within available crop margin; world camera continues independently even if backdrop has no pan margin."
+    },
+    {
+      "id": "background.boat-room",
+      "path": "assets/originals/batch-12-backgrounds/boat-room-background.png",
+      "kind": "original",
+      "source": "Official creator-supplied PNG: backgrounds.zip",
+      "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
+      "sha256": "507d3d65f4d36db9516e71efca1b80ea6a8d7614aa960e1d24770a980ba2ba37",
+      "batch_id": "batch-12",
+      "original_filename": "boat-room-background.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "has_transparency": false,
+      "content_bounds_px": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "status": "mapped",
+      "usage": "scene-background",
+      "name": "Boat Room Background",
+      "presentation": {
+        "fit": "contain-preserve-aspect",
+        "repeat": "none",
+        "placement": "configurable scene anchors and safe areas"
+      },
+      "composition_notes": "Boat selection and scramble backdrop; keep HTML controls readable with contrast panels, keyboard focus and touch targets."
+    },
+    {
+      "id": "background.celebration",
+      "path": "assets/originals/batch-12-backgrounds/celebration-background.png",
+      "kind": "original",
+      "source": "Official creator-supplied PNG: backgrounds.zip",
+      "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
+      "sha256": "43b38b336f5dce0bb21b06a33e26426c6aa4c3b6bbc89f9c34f2353ffbb0fe34",
+      "batch_id": "batch-12",
+      "original_filename": "celebration-background.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "has_transparency": false,
+      "content_bounds_px": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "status": "mapped",
+      "usage": "scene-background",
+      "name": "Celebration Background",
+      "presentation": {
+        "fit": "contain-preserve-aspect",
+        "repeat": "none",
+        "placement": "configurable scene anchors and safe areas"
+      },
+      "composition_notes": "Results backdrop; configurable podium and ground anchors for full-body characters, neutral/celebrating pose alignment and individual gentle bounce rhythms. Static reduced-motion alternative."
     }
   ],
   "batches": [
@@ -4513,6 +4609,33 @@
       ],
       "extra_pages": [],
       "inspection": "ZIP CRC, PNG verification, full decoding, and visual inspection passed; no missing, extra, blank, or corrupt files. Page 154 contains an opaque white vertical backing; preserved unchanged."
+    },
+    {
+      "id": "batch-12",
+      "name": "Final official scene backgrounds",
+      "source_archive": "backgrounds.zip",
+      "source_archive_sha256": "0916ed209c489aa25a44693fdfd18f002d3b9909597182b28191123d71a3e76b",
+      "mapping_source": "Creator-provided background filenames and intended scenes; recorded in docs/artwork-intake-backgrounds.md",
+      "expected_files": [
+        "lake-background.png",
+        "boat-room-background.png",
+        "celebration-background.png"
+      ],
+      "extra_pages": [],
+      "inspection": "ZIP CRC, PNG verification, full decoding, and visual inspection passed. All opaque RGB. Lake has 17-pixel white strips at top and bottom; use presentation crop without changing original."
+    }
+  ],
+  "pending_source_updates": [
+    {
+      "pages": [
+        49,
+        51,
+        119,
+        133,
+        154
+      ],
+      "status": "inline-previews-only",
+      "notes": "Creator supplied corrected-looking previews with final background request, but downloadable PNG bytes were not provided. Existing originals and white-backing flags remain unchanged. Import corrected originals separately with provenance and hashes when supplied; do not reconstruct from previews."
     }
   ]
 }

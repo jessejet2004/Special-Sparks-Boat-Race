@@ -1,6 +1,6 @@
 # Official artwork library audit
 
-Status: **numbered library verified; final background intake pending downloadable original PNGs**. No game implementation is authorised by this audit. The creator requests findings and necessary decisions before implementation proceeds.
+Status: **all 155 original illustrations and backgrounds registered and verified**. Five corrected numbered source PNGs remain pending: only inline correction previews were provided. No game implementation was started in this audit stage; the creator requested the results before proceeding.
 
 ## Numbered library results
 
@@ -30,36 +30,42 @@ These are valid PNGs with transparency outside the backing, not corruption. They
 
 Other integration considerations: large transparent padding, varying apparent character sizes/pose origins, embedded motion/splash marks, and curved seated-pose ledges. Content bounds and per-boat/per-pose placement, scale, masks and layers must handle these; do not stretch artwork or encode visual offsets as simulation rules. Pair/frame alignment and reduced motion remain future implementation work.
 
-## Final backgrounds: expected files and current limitation
+## Final backgrounds: original-file intake completed
 
-The creator has shown three backgrounds inline and supplied these intended filenames. Their original downloadable PNG bytes are not available in the workspace or as downloadable attachment references in this request. Therefore they have **not** been imported, hashed, registered as present, or backed up to GitHub. Exact original dimensions, PNG integrity, colour mode and byte preservation remain unverified. Do not reconstruct originals from rendered chat previews or describe the complete library as backed up.
+`backgrounds.zip` supplied exactly the expected three originals. Archive CRC and individual PNG verification/full decoding passed. Original bytes and hashes are preserved under `assets/originals/batch-12-backgrounds/` and in the manifest. See [background intake](artwork-intake-backgrounds.md).
 
-| Expected filename | Intended use | Visual review from inline preview only |
+| Filename | Verified dimensions | Transparency |
 | --- | --- | --- |
-| lake-background.png | Race foundation for all four challenges | Wide water scene with foreground and bank scenery. Visible white top/bottom strips; verify actual source and use configurable render cropping if appropriate. Not demonstrated seamless at left/right edges. |
-| boat-room-background.png | Boat selection and equipment scramble | Clear foreground floor supports boats/characters; busy walls need readable accessible UI panels and careful safe areas. |
-| celebration-background.png | Results and full-body celebrations | Central three-place podium supplies anchors; preserve aspect ratio and position other competitors nearby without covering results. |
+| lake-background.png | 2900 × 1000 | RGB, opaque |
+| boat-room-background.png | 1920 × 1080 | RGB, opaque |
+| celebration-background.png | 1920 × 1080 | RGB, opaque |
 
-The latest resend shows the same three scene types and does not establish byte-level access. Obtain a downloadable ZIP containing the named PNGs to finish intake and audit. After receipt, inspect dimensions, full decoding, source hashes, any borders/transparency, and camera/composition suitability; register and preserve all three unchanged. Expected final count is 155 original images if no other files are added.
+The lake's 17-pixel top and bottom white strips are excluded by presentation source rectangle `[0, 17, 2900, 966]`, not by modifying the original. Uniform scale and a single non-repeating backdrop with bounded horizontal pan avoid distortion and repeating seams. World objects and the race camera scroll independently. The Boat Room and celebration backgrounds are suitable for their intended scenes with configurable safe areas and character/podium anchors. Runtime appearance remains to be tested during implementation.
+
+The five corrected numbered images were shown inline with this upload, but no downloadable corrected source files are present in the ZIP or workspace. They appear visually improved, but their original PNG dimensions, alpha and hashes cannot be verified. The five prior originals remain unchanged with their existing flags. Corrections are not registered or backed up; obtain their downloadable source ZIP before claiming those issues resolved. Do not reconstruct originals from previews.
 
 ## Background integration direction to preserve
 
-Lake: preserve aspect ratio, support horizontal camera scrolling, and layer environmental/encounter assets above it. Do not assume the art is a seamless infinite tile. A reasonable initial approach is a slowly moving scenic backdrop with independently scrolling world objects; for longer courses, verify bounded panning or a separate repeatable presentation treatment without visible joins. Do not stretch the illustration to course length. Choose the final treatment after the original is inspected and previewed. No replacement scenery is authorised by this note.
+Lake: preserve aspect ratio and render the configured border-free source rectangle. Fit it with one uniform scale, pan within available horizontal crop margin, and clamp at both edges. Map backdrop pan to normalised course progress; do not wrap, mirror or tile. If no pan margin is available, keep the backdrop fixed while world objects scroll. The actual world camera remains independent, so finish lines enter naturally without changing boat distances. Reduced motion fixes the backdrop. No scrolling renderer has been built yet; verify visual behaviour across viewports during implementation.
 
 Boat Room: use behind interactive selection/scramble UI. Keep controls in accessible HTML with adequate contrast, focus visibility and touch targets, rather than relying on artwork alone. Configure safe areas by viewport.
 
 Celebration: align full-body characters to configurable podium/ground anchors and preserve individual scaling and pose offsets. Keep the creator's simple neutral/celebrating alternation, small bounce and different character rhythms. Use static celebrations for reduced motion. Avoid placing results text directly over busy art. No animation is implemented yet.
 
-## GitHub preservation evidence
+## GitHub preservation and restoration
 
-Before this report, the full numbered library, manifest and intake documentation were pushed on branch `work` at `fabefe5c13893e543c5724746bf210a8603510e3`. A separate fresh clone directly from GitHub restored that exact commit and all 152 original files; every original hash matched the restored manifest and the checkout was clean. This proves restoration of the numbered artwork without the source uploads or this conversation.
+All 152 numbered originals were previously restored in an independent fresh GitHub clone at `fabefe5c13893e543c5724746bf210a8603510e3`, with every hash matching. The final background/audit stage adds three originals for a total of 155, all referenced in the manifest. The completion response records the exact pushed final commit and outcome of another fresh clone audit of that commit. Corrected inline-only source updates are excluded from that preservation claim.
 
-This report is committed and pushed as its own audit stage; the accompanying response reports its final SHA and verified push result. It does not establish preservation of the three missing original backgrounds. After final intake, repeat remote verification and fresh-checkout hash checks before claiming the complete artwork library is backed up.
+Reproduce the library audit from a fresh checkout with Python 3.9 or newer, without third-party dependencies:
 
-## Necessary next steps and deferred decisions
+```sh
+python3 scripts/audit-artwork.py
+```
 
-1. Obtain downloadable originals for the three backgrounds. This blocks completion of intake and the complete-library backup claim.
-2. Resolve the five opaque backings with transparent re-exports, or explicitly defer those illustrations during the initial foundation. This need not block work on unaffected assets after authorisation.
-3. Report final audit/backup results and obtain the creator's final implementation instruction. Do not begin implementation merely because previews have arrived.
+The audit fails on missing/orphaned files, incorrect page/background inventories, duplicate asset IDs/paths, SHA-256 changes, invalid PNG chunk CRCs or compressed image streams, metadata mismatches, and broken artwork pair references. Current sources use non-interlaced 8-bit RGB/RGBA PNGs; new unsupported formats fail explicitly. Intake additionally performed full image decoding and visual review. The original ZIP files are not required for restoration because each extracted original and its hash is tracked.
 
-Exact equipment balance, scramble allocation rules, race controls and scoring questions in the development proposal can be resolved before their respective gameplay stages. They do not need to block the illustrated foundation. No new gameplay decisions are imposed by this audit.
+## Remaining issues and implementation boundary
+
+- Downloadable corrected sources for pages 49, 51, 119, 133 and 154 are needed to verify and integrate the creator's fixes. Preserve the earlier originals if revised files arrive. This does not block verification or backup of the complete original library, but those five compositing issues remain unresolved in the checked-in files.
+- No required numbered artwork or background is missing from the original inventory. Section labels 43 and 50 were deliberately excluded; accidental 159 was removed as requested.
+- No game implementation is included in this stage. Proceed with development only after delivering this report and the creator's subsequent implementation instruction. Later gameplay decisions can be resolved at their respective stages rather than blocking unaffected artwork foundation work.

@@ -2,7 +2,7 @@
 
 Boat Race development repository. The implementation has not started yet.
 
-The creator's [Version 1 design brief](docs/boat-race-design-brief-v1.md) and [development proposal](docs/boat-race-development-proposal.md) are saved in this repository. Per the latest creator instruction, game implementation must wait until all artwork batches have been uploaded and the creator gives the final instruction. No game code or substitute artwork has been created.
+The creator's [Version 1 design brief](docs/boat-race-design-brief-v1.md) and [development proposal](docs/boat-race-development-proposal.md) are saved in this repository. The original artwork batches are now imported; the creator requested the final audit and backup report before proceeding with implementation. No game code or substitute artwork has been created.
 
 ## Restore from GitHub
 
@@ -46,9 +46,11 @@ Keep official source artwork unchanged in `assets/originals/`, and generated or 
 
 [Batch 10 intake](docs/artwork-intake-batch-10.md) adds Slowest Race and Wobbly Waters assets on pages 127–140. Page 133 has an opaque white backing flagged for transparent re-export. Challenge camera and configurable movement directions are documented; implementation is still on hold.
 
-[Batch 11 intake](docs/artwork-intake-batch-11.md) adds Picnic Panic and supporting effects on pages 141–154. Page 154 has an opaque white backing flagged for transparent re-export. Main lake, Boat Room and celebration backgrounds and final implementation authorisation are still pending.
+[Batch 11 intake](docs/artwork-intake-batch-11.md) adds Picnic Panic and supporting effects on pages 141–154. Page 154 has an opaque white backing flagged for transparent re-export. The three backgrounds have since arrived in the final intake; gameplay implementation is still pending.
 
-The [library audit](docs/artwork-library-audit.md) verifies all 152 numbered originals and their restoration from GitHub. Five images have known opaque backings. The three final backgrounds are visible in chat previews but their downloadable original PNGs are still needed for byte-preserving intake, integrity checks and a complete-library backup. Implementation remains on hold.
+The [final library audit](docs/artwork-library-audit.md) covers all 155 original images, including the three [official backgrounds](docs/artwork-intake-backgrounds.md). Originals are preserved unchanged. Five earlier numbered files retain known white backings; inline correction previews are visible, but their downloadable corrected source PNGs are still needed for verified intake. The lake border crop and non-repeating, aspect-preserving presentation are configured in the manifest. No game implementation has started.
+
+Run `python3 scripts/audit-artwork.py` with Python 3.9+ to verify the complete original inventory, hashes and PNG structure from a fresh checkout; no third-party packages are needed.
 
 ## Complete a development stage
 
