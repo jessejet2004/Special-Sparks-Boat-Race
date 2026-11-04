@@ -36,4 +36,6 @@ Keep official source artwork unchanged in `assets/originals/`, and generated or 
 
 ## Complete a development stage
 
+[Batch 4 intake](docs/artwork-intake-batch-04.md) adds neutral and celebrating full-body illustrations for all six characters, separate from seated boat poses. Pages 43 and 50 are deliberately excluded. Pages 49 and 51 have opaque white backings flagged for future transparent re-export. The intake notes retain the creator's lightweight celebration animation direction; no animation is implemented yet.
+
 Follow [AGENTS.md](AGENTS.md). Run the stage's checks, review and commit its changes, then push the current branch to GitHub. Report the branch, full commit ID, and actual push outcome. Confirm the remote branch points to the pushed commit with `git ls-remote origin refs/heads/work`. Failed pushes must be reported immediately; local commits alone are not a GitHub backup.
