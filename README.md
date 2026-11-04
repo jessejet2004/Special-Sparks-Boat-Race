@@ -32,7 +32,7 @@ No credentials or external services are required for the current repository cont
 
 ## Artwork
 
-Keep official source artwork unchanged in `assets/originals/`, and generated or edited derivatives in `assets/derived/`. Track every asset in [assets/manifest.json](assets/manifest.json), including its provenance, rights information, and SHA-256 checksum. [Batch 1 intake](docs/artwork-intake-batch-01.md) records Lantern and Foxy pages 1–14; [Batch 2 intake](docs/artwork-intake-batch-02.md) records Ruby and Dizzy pages 15–28. The accidental extra `159.png` was removed at the creator's request.
+Keep official source artwork unchanged in `assets/originals/`, and generated or edited derivatives in `assets/derived/`. Track every asset in [assets/manifest.json](assets/manifest.json), including its provenance, rights information, and SHA-256 checksum. [Batch 1 intake](docs/artwork-intake-batch-01.md) records Lantern and Foxy pages 1–14; [Batch 2 intake](docs/artwork-intake-batch-02.md) records Ruby and Dizzy pages 15–28; [Batch 3 intake](docs/artwork-intake-batch-03.md) records Nibbles and Tilly pages 29–42. All six characters' supplied poses and labels are now imported. The accidental extra `159.png` was removed at the creator's request.
 
 ## Complete a development stage
 
