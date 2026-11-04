@@ -42,7 +42,7 @@ export class RaceScene {
         bg.height * scale,
       );
     }
-    const world = (x: number) => (x - this.camera) * worldScale + 70;
+    const world = (x: number) => (x - this.camera) * worldScale + 110;
     // Deliberate course placements, independent from collisions.
     const scenery = [
       "environment.lily-pads-pink-flower",
@@ -206,10 +206,10 @@ export class RaceScene {
       let x = waveMode ? 35 + ((i % 3) * (W - 80)) / 3 : world(p.x),
         y = waveMode
           ? H * 0.35 + Math.floor(i / 3) * H * 0.31
-          : H * 0.3 + i * H * 0.095;
+          : H * 0.28 + i * H * 0.11;
       const width = waveMode
         ? Math.min(170, (W - 120) / 3)
-        : Math.min(116, H * 0.16);
+        : Math.max(80, Math.min(116, H * 0.18));
       if (!waveMode && (x < 0 || x > W - 80)) {
         ctx.fillStyle = i === 0 ? "#124c4d" : "#375e5c";
         ctx.font = "bold 12px sans-serif";
@@ -301,18 +301,16 @@ export class RaceScene {
       ctx.textAlign = "center";
       const label = characterNames[i] + (i === 0 ? " · YOU" : "");
       const labelWidth = ctx.measureText(label).width + 18;
+      const nameX = waveMode
+        ? x + width / 2 - labelWidth / 2
+        : Math.max(4, x - labelWidth - 9);
+      const nameY = waveMode ? y + width * 0.73 : y + width * 0.42;
       ctx.fillStyle = i === 0 ? "#123e43" : "#fffbeaee";
       ctx.beginPath();
-      ctx.roundRect(
-        x + width / 2 - labelWidth / 2,
-        y + width * 0.73,
-        labelWidth,
-        23,
-        9,
-      );
+      ctx.roundRect(nameX, nameY, labelWidth, 23, 9);
       ctx.fill();
       ctx.fillStyle = i === 0 ? "#fff8dc" : "#163f43";
-      ctx.fillText(label, x + width / 2, y + width * 0.73 + 16);
+      ctx.fillText(label, nameX + labelWidth / 2, nameY + 16);
       if (waveMode) {
         ctx.fillStyle = "#ffffffba";
         ctx.fillRect(x + 15, y + width * 0.73 + 30, width - 30, 5);

@@ -1208,3 +1208,27 @@ html[data-motion="reduce"] .celebrant .celebrate {
 .header-right .quiet {
   white-space: nowrap;
 }
+
+/* Give the six lanes enough room for readable hulls and side name plates. */
+.race-canvas {
+  height: calc(100dvh - 255px);
+  min-height: 360px;
+  max-height: 650px;
+}
+@media (max-width: 760px) {
+  .race-canvas {
+    height: 500px;
+  }
+}
+@media (max-width: 560px) {
+  .race-canvas {
+    height: 430px;
+  }
+}
+.race-hint {
+  left: auto;
+  right: 14px;
+  top: 12px;
+  bottom: auto;
+  max-width: 60%;
+}
