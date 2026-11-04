@@ -1,6 +1,6 @@
 # Boat Race development proposal
 
-Status: proposal only. Stage 1 requires creator approval and the first official artwork ZIP. No game implementation or placeholder game is authorised yet.
+Status: approved for full autonomous implementation by the creator after final artwork intake. The original proposal is retained below as design history. See README.md and gameplay-decisions.md for current implementation and resolved defaults.
 
 The authoritative design is [the supplied Version 1 brief](boat-race-design-brief-v1.md). This document proposes architecture and identifies open decisions; it does not replace the brief or the still-missing official equipment inventory. The repository currently contains documentation and an empty asset manifest, with no prototype, code, artwork, dependencies, or tests. The earlier prototype's camera behaviour can be implemented from the brief; exact comparisons require the prototype or a recording if available.
 
