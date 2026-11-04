@@ -2,7 +2,7 @@
 
 Boat Race development repository. The implementation has not started yet.
 
-The creator's [Version 1 design brief](docs/boat-race-design-brief-v1.md) and [development proposal](docs/boat-race-development-proposal.md) are saved in this repository. Stage 1 awaits creator approval and the first official artwork ZIP; no game code or substitute artwork has been created.
+The creator's [Version 1 design brief](docs/boat-race-design-brief-v1.md) and [development proposal](docs/boat-race-development-proposal.md) are saved in this repository. Per the latest creator instruction, game implementation must wait until all artwork batches have been uploaded and the creator gives the final instruction. No game code or substitute artwork has been created.
 
 ## Restore from GitHub
 
@@ -19,7 +19,7 @@ git status --short
 
 ## Installation, development, build, and tests
 
-Currently this repository contains workflow documentation and an empty asset manifest. There are no application dependencies to install, development server to start, build command, or game tests to run. Boat Race implementation must add the exact commands, tool versions, dependency lockfiles, and required non-secret configuration here before its first stage is completed.
+Currently this repository contains workflow documentation, an asset manifest, and imported official artwork. There are no application dependencies to install, development server to start, build command, or game tests to run. Boat Race implementation must add the exact commands, tool versions, dependency lockfiles, and required non-secret configuration here before its first stage is completed.
 
 The current manifest can be validated with Python 3:
 
@@ -32,7 +32,7 @@ No credentials or external services are required for the current repository cont
 
 ## Artwork
 
-Keep official source artwork unchanged in `assets/originals/`, and generated or edited derivatives in `assets/derived/`. Track every asset in [assets/manifest.json](assets/manifest.json), including its provenance, rights information, and SHA-256 checksum. No official artwork has been supplied or imported yet.
+Keep official source artwork unchanged in `assets/originals/`, and generated or edited derivatives in `assets/derived/`. Track every asset in [assets/manifest.json](assets/manifest.json), including its provenance, rights information, and SHA-256 checksum. [Batch 1 intake](docs/artwork-intake-batch-01.md) records Lantern and Foxy pages 1–14 and an excluded, fully transparent extra file, `159.png`.
 
 ## Complete a development stage
 
