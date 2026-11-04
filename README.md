@@ -48,6 +48,8 @@ Keep official source artwork unchanged in `assets/originals/`, and generated or 
 
 [Batch 11 intake](docs/artwork-intake-batch-11.md) adds Picnic Panic and supporting effects on pages 141–154. Page 154 has an opaque white backing flagged for transparent re-export. Main lake, Boat Room and celebration backgrounds and final implementation authorisation are still pending.
 
+The [library audit](docs/artwork-library-audit.md) verifies all 152 numbered originals and their restoration from GitHub. Five images have known opaque backings. The three final backgrounds are visible in chat previews but their downloadable original PNGs are still needed for byte-preserving intake, integrity checks and a complete-library backup. Implementation remains on hold.
+
 ## Complete a development stage
 
 Follow [AGENTS.md](AGENTS.md). Run the stage's checks, review and commit its changes, then push the current branch to GitHub. Report the branch, full commit ID, and actual push outcome. Confirm the remote branch points to the pushed commit with `git ls-remote origin refs/heads/work`. Failed pushes must be reported immediately; local commits alone are not a GitHub backup.
