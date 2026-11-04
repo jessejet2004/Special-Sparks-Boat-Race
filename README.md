@@ -34,8 +34,10 @@ No credentials or external services are required for the current repository cont
 
 Keep official source artwork unchanged in `assets/originals/`, and generated or edited derivatives in `assets/derived/`. Track every asset in [assets/manifest.json](assets/manifest.json), including its provenance, rights information, and SHA-256 checksum. [Batch 1 intake](docs/artwork-intake-batch-01.md) records Lantern and Foxy pages 1–14; [Batch 2 intake](docs/artwork-intake-batch-02.md) records Ruby and Dizzy pages 15–28; [Batch 3 intake](docs/artwork-intake-batch-03.md) records Nibbles and Tilly pages 29–42. All six characters' supplied poses and labels are now imported. The accidental extra `159.png` was removed at the creator's request.
 
-## Complete a development stage
-
 [Batch 4 intake](docs/artwork-intake-batch-04.md) adds neutral and celebrating full-body illustrations for all six characters, separate from seated boat poses. Pages 43 and 50 are deliberately excluded. Pages 49 and 51 have opaque white backings flagged for future transparent re-export. The intake notes retain the creator's lightweight celebration animation direction; no animation is implemented yet.
+
+[Batch 5 intake](docs/artwork-intake-batch-05.md) adds the seven official boats and their seven matching fallen pieces, pages 57–70. Seating and optional-effect requirements are documented; no game effects are implemented. The flying saucer is excluded.
+
+## Complete a development stage
 
 Follow [AGENTS.md](AGENTS.md). Run the stage's checks, review and commit its changes, then push the current branch to GitHub. Report the branch, full commit ID, and actual push outcome. Confirm the remote branch points to the pushed commit with `git ls-remote origin refs/heads/work`. Failed pushes must be reported immediately; local commits alone are not a GitHub backup.
