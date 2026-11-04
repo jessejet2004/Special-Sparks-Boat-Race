@@ -40,6 +40,8 @@ Keep official source artwork unchanged in `assets/originals/`, and generated or 
 
 [Batch 6 intake](docs/artwork-intake-batch-06.md) adds equipment pages 71–84; [Batch 7 intake](docs/artwork-intake-batch-07.md) adds pages 85–98. All 28 official equipment illustrations are now imported in four groups of seven. Gameplay definitions and integration remain pending; creator interaction suggestions are documented without implemented mechanics.
 
+[Batch 8 intake](docs/artwork-intake-batch-08.md) adds encounter illustrations on pages 99–112, organised as seven initial/action pairs. Encounter and animation directions are documented; no mechanics are implemented.
+
 ## Complete a development stage
 
 Follow [AGENTS.md](AGENTS.md). Run the stage's checks, review and commit its changes, then push the current branch to GitHub. Report the branch, full commit ID, and actual push outcome. Confirm the remote branch points to the pushed commit with `git ls-remote origin refs/heads/work`. Failed pushes must be reported immediately; local commits alone are not a GitHub backup.
