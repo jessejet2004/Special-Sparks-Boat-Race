@@ -38,6 +38,8 @@ Keep official source artwork unchanged in `assets/originals/`, and generated or 
 
 [Batch 5 intake](docs/artwork-intake-batch-05.md) adds the seven official boats and their seven matching fallen pieces, pages 57–70. Seating and optional-effect requirements are documented; no game effects are implemented. The flying saucer is excluded.
 
+[Batch 6 intake](docs/artwork-intake-batch-06.md) adds the 14 official equipment illustrations on pages 71–84, in propulsion/movement and flotation/stability/survival groups. Gameplay definitions and remaining equipment inventory are still pending.
+
 ## Complete a development stage
 
 Follow [AGENTS.md](AGENTS.md). Run the stage's checks, review and commit its changes, then push the current branch to GitHub. Report the branch, full commit ID, and actual push outcome. Confirm the remote branch points to the pushed commit with `git ls-remote origin refs/heads/work`. Failed pushes must be reported immediately; local commits alone are not a GitHub backup.
