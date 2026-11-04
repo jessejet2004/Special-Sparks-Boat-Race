@@ -1302,12 +1302,12 @@
     },
     {
       "id": "character.tilly.full-body-neutral",
-      "path": "assets/originals/batch-04-full-body-pages-44-56/49.png",
+      "path": "assets/originals/batch-13-corrected-pages-49-51-119-133-154/49.png",
       "kind": "original",
-      "source": "Official creator-supplied Canva PNG export: full body illustrations .zip",
+      "source": "Official creator-supplied corrected PNG export: remaining illustrations .zip",
       "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
-      "sha256": "165ff90d94df4daca5354884c64275584f3297c504e13b4a72ef23656a97956b",
-      "batch_id": "batch-04",
+      "sha256": "99da5065694f7633e8b1456dceca484fae5b4bc4d2b71c7cbdf542c8fdaff62b",
+      "batch_id": "batch-13",
       "page": 49,
       "original_filename": "49.png",
       "width": 2000,
@@ -1315,10 +1315,10 @@
       "mode": "RGBA",
       "has_transparency": true,
       "content_bounds_px": [
-        671,
-        587,
-        1329,
-        1413
+        762,
+        742,
+        1246,
+        1376
       ],
       "status": "mapped",
       "usage": "standing-and-celebration",
@@ -1327,16 +1327,18 @@
       "name": "Tilly — Full Body Neutral",
       "composition_notes": "Full-body illustration for standing scenes or celebrations; keep scale, position and pose alignment configurable. Use existing seated illustrations for boat gameplay.",
       "reaction_notes": "Preserve the character-specific expression. Future lightweight celebration may alternate neutral and celebrating full-body poses with a small bounce and individual rhythm; provide reduced motion. See Batch 4 intake notes.",
-      "inspection_notes": "Opaque white rectangular background remains around artwork within an otherwise transparent canvas. Preserved unchanged; transparent re-export recommended before compositing on a coloured scene."
+      "inspection_notes": "Corrected creator source verified: transparent outer background, white rectangular backing removed. Previous source retained unchanged in archived_sources. Content bounds and placement differ from earlier export; configure alignment from this revision.",
+      "previous_source_id": "character.tilly.full-body-neutral.superseded-v1",
+      "revision": "corrected-transparent-v2"
     },
     {
       "id": "character.lantern.full-body-celebrating",
-      "path": "assets/originals/batch-04-full-body-pages-44-56/51.png",
+      "path": "assets/originals/batch-13-corrected-pages-49-51-119-133-154/51.png",
       "kind": "original",
-      "source": "Official creator-supplied Canva PNG export: full body illustrations .zip",
+      "source": "Official creator-supplied corrected PNG export: remaining illustrations .zip",
       "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
-      "sha256": "6ae1a9aa071e52a61b05ebe09637af8ab3d81789a95170666ba286ff2f236ade",
-      "batch_id": "batch-04",
+      "sha256": "28f4f40ebba269176f97ae3426462444ad1546bc2f1ffd58d3b8ebad330f2ffe",
+      "batch_id": "batch-13",
       "page": 51,
       "original_filename": "51.png",
       "width": 2000,
@@ -1344,10 +1346,10 @@
       "mode": "RGBA",
       "has_transparency": true,
       "content_bounds_px": [
-        457,
-        512,
-        1542,
-        1489
+        578,
+        568,
+        1445,
+        1441
       ],
       "status": "mapped",
       "usage": "standing-and-celebration",
@@ -1356,7 +1358,9 @@
       "name": "Lantern — Full Body Celebrating",
       "composition_notes": "Full-body illustration for standing scenes or celebrations; keep scale, position and pose alignment configurable. Use existing seated illustrations for boat gameplay.",
       "reaction_notes": "Preserve the character-specific expression. Future lightweight celebration may alternate neutral and celebrating full-body poses with a small bounce and individual rhythm; provide reduced motion. See Batch 4 intake notes.",
-      "inspection_notes": "Opaque white rectangular background remains around artwork within an otherwise transparent canvas. Preserved unchanged; transparent re-export recommended before compositing on a coloured scene."
+      "inspection_notes": "Corrected creator source verified: transparent outer background, white rectangular backing removed. Previous source retained unchanged in archived_sources. Content bounds and placement differ from earlier export; configure alignment from this revision.",
+      "previous_source_id": "character.lantern.full-body-celebrating.superseded-v1",
+      "revision": "corrected-transparent-v2"
     },
     {
       "id": "character.foxy.full-body-celebrating",
@@ -3256,12 +3260,12 @@
     },
     {
       "id": "environment.flowering-riverbank-bush",
-      "path": "assets/originals/batch-09-lake-and-fastest-pages-113-126/119.png",
+      "path": "assets/originals/batch-13-corrected-pages-49-51-119-133-154/119.png",
       "kind": "original",
-      "source": "Official creator-supplied Canva PNG export: illustrations to use 113-126.zip",
+      "source": "Official creator-supplied corrected PNG export: remaining illustrations .zip",
       "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
-      "sha256": "367b5a8639ecd8ba3f90ffd6c7ffc6f9b14e99e40dfda62b0c25010bca25a6c1",
-      "batch_id": "batch-09",
+      "sha256": "d8f611ab6bf1c4be4ba0388ace54c0bad50cfd5c985ab2da81da4f48050837cc",
+      "batch_id": "batch-13",
       "page": 119,
       "original_filename": "119.png",
       "width": 2000,
@@ -3269,10 +3273,10 @@
       "mode": "RGBA",
       "has_transparency": true,
       "content_bounds_px": [
-        544,
-        0,
-        1456,
-        2000
+        563,
+        795,
+        1448,
+        1476
       ],
       "status": "mapped",
       "usage": "general-lake-environment",
@@ -3285,7 +3289,9 @@
         "picnic-panic",
         "wobbly-waters"
       ],
-      "inspection_notes": "Opaque white vertical rectangle behind bush extends to top and bottom of canvas, with transparency outside. Preserved unchanged; transparent re-export recommended for scene compositing."
+      "inspection_notes": "Corrected creator source verified: transparent outer background, white rectangular backing removed. Previous source retained unchanged in archived_sources. Content bounds and placement differ from earlier export; configure alignment from this revision.",
+      "previous_source_id": "environment.flowering-riverbank-bush.superseded-v1",
+      "revision": "corrected-transparent-v2"
     },
     {
       "id": "fastest-race.very-official-race-judge",
@@ -3639,12 +3645,12 @@
     },
     {
       "id": "slowest-race.turtle-checkered-flag",
-      "path": "assets/originals/batch-10-slowest-and-wobbly-pages-127-140/133.png",
+      "path": "assets/originals/batch-13-corrected-pages-49-51-119-133-154/133.png",
       "kind": "original",
-      "source": "Official creator-supplied Canva PNG export: illustrations to use 127-140.zip",
+      "source": "Official creator-supplied corrected PNG export: remaining illustrations .zip",
       "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
-      "sha256": "9633b1ced30cf6768c2a42906423b38db0dfa1c82d501eac9b2441208abef07b",
-      "batch_id": "batch-10",
+      "sha256": "50d146966924686786a849c24a58631bedb8bb700e8a060755e58419bcb8127a",
+      "batch_id": "batch-13",
       "page": 133,
       "original_filename": "133.png",
       "width": 2000,
@@ -3652,18 +3658,20 @@
       "mode": "RGBA",
       "has_transparency": true,
       "content_bounds_px": [
-        511,
-        65,
-        1489,
-        2000
+        608,
+        615,
+        1452,
+        1507
       ],
       "status": "mapped",
       "usage": "slowest-race-scene-asset",
       "name": "Turtle with Checkered Flag",
       "composition_notes": "Keep scenery placement, scale, layering and animation timing configurable. Support world-stationary elements and independent drift, bobbing or movement without crowding or obscuring boats and characters.",
       "design_notes": "Decorative, warning, obstacle, encounter or rescue roles require separate approved definitions. Creator examples are possibilities, not mandatory events or implemented gameplay.",
-      "inspection_notes": "Opaque white rectangular backing behind turtle within transparent canvas. Preserved unchanged; transparent re-export recommended before compositing. Content bounds include backing.",
-      "camera_direction": "Slowest Race uses scrolling camera; finish line begins off-screen and enters view as competitors approach."
+      "inspection_notes": "Corrected creator source verified: transparent outer background, white rectangular backing removed. Previous source retained unchanged in archived_sources. Content bounds and placement differ from earlier export; configure alignment from this revision.",
+      "camera_direction": "Slowest Race uses scrolling camera; finish line begins off-screen and enters view as competitors approach.",
+      "previous_source_id": "slowest-race.turtle-checkered-flag.superseded-v1",
+      "revision": "corrected-transparent-v2"
     },
     {
       "id": "wobbly-waters.probably-safe-sign",
@@ -4204,12 +4212,12 @@
     },
     {
       "id": "supporting-effect.jumping-fish",
-      "path": "assets/originals/batch-11-picnic-and-effects-pages-141-154/154.png",
+      "path": "assets/originals/batch-13-corrected-pages-49-51-119-133-154/154.png",
       "kind": "original",
-      "source": "Official creator-supplied Canva PNG export: illustrations to use 141-154.zip",
+      "source": "Official creator-supplied corrected PNG export: remaining illustrations .zip",
       "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
-      "sha256": "61d5c6f350161279d06eb6f88b48747debd78d3cefb30b47b4ba2e167fed3a35",
-      "batch_id": "batch-11",
+      "sha256": "41b2992962e33f6b0b8275384091c9d350688e8b65f997c70c72400eb13e6536",
+      "batch_id": "batch-13",
       "page": 154,
       "original_filename": "154.png",
       "width": 2000,
@@ -4217,17 +4225,19 @@
       "mode": "RGBA",
       "has_transparency": true,
       "content_bounds_px": [
-        643,
-        219,
-        1358,
-        1781
+        654,
+        708,
+        1343,
+        1407
       ],
       "status": "mapped",
       "usage": "reusable-supporting-effect",
       "name": "Jumping Fish",
       "composition_notes": "Keep placement, scale, layering and lightweight animation configurable, separately from gameplay mechanics. Decorative art does not imply collision or gameplay effects.",
       "design_notes": "Use selectively; creator examples are possible uses, not mandatory events or final rules.",
-      "inspection_notes": "Opaque white vertical rectangle behind fish within transparent canvas. Preserved unchanged; transparent re-export recommended. Content bounds include backing."
+      "inspection_notes": "Corrected creator source verified: transparent outer background, white rectangular backing removed. Previous source retained unchanged in archived_sources. Content bounds and placement differ from earlier export; configure alignment from this revision.",
+      "previous_source_id": "supporting-effect.jumping-fish.superseded-v1",
+      "revision": "corrected-transparent-v2"
     },
     {
       "id": "background.lake",
@@ -4623,19 +4633,175 @@
       ],
       "extra_pages": [],
       "inspection": "ZIP CRC, PNG verification, full decoding, and visual inspection passed. All opaque RGB. Lake has 17-pixel white strips at top and bottom; use presentation crop without changing original."
-    }
-  ],
-  "pending_source_updates": [
+    },
     {
-      "pages": [
+      "id": "batch-13",
+      "name": "Corrected transparent originals — Pages 49, 51, 119, 133 and 154",
+      "source_archive": "remaining illustrations .zip",
+      "source_archive_sha256": "a050757d5efd83408fcb6b43b3cbce65cf3874f3c577002203cd2076ad41dc38",
+      "mapping_source": "Numbered filenames retain previously creator-specified page mappings; see docs/artwork-intake-corrections.md",
+      "expected_pages": [
         49,
         51,
         119,
         133,
         154
       ],
-      "status": "inline-previews-only",
-      "notes": "Creator supplied corrected-looking previews with final background request, but downloadable PNG bytes were not provided. Existing originals and white-backing flags remain unchanged. Import corrected originals separately with provenance and hashes when supplied; do not reconstruct from previews."
+      "extra_pages": [],
+      "inspection": "ZIP CRC, PNG verification, full decoding and coloured-background visual inspection passed. All five corrected images have transparent backgrounds without earlier white rectangles; prior originals retained as archived sources."
+    }
+  ],
+  "archived_sources": [
+    {
+      "id": "character.tilly.full-body-neutral.superseded-v1",
+      "path": "assets/originals/batch-04-full-body-pages-44-56/49.png",
+      "kind": "original",
+      "source": "Official creator-supplied Canva PNG export: full body illustrations .zip",
+      "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
+      "sha256": "165ff90d94df4daca5354884c64275584f3297c504e13b4a72ef23656a97956b",
+      "batch_id": "batch-04",
+      "page": 49,
+      "original_filename": "49.png",
+      "width": 2000,
+      "height": 2000,
+      "mode": "RGBA",
+      "has_transparency": true,
+      "content_bounds_px": [
+        671,
+        587,
+        1329,
+        1413
+      ],
+      "status": "superseded",
+      "usage": "standing-and-celebration",
+      "character": "Tilly",
+      "pose": "full-body-neutral",
+      "name": "Tilly — Full Body Neutral",
+      "composition_notes": "Full-body illustration for standing scenes or celebrations; keep scale, position and pose alignment configurable. Use existing seated illustrations for boat gameplay.",
+      "reaction_notes": "Preserve the character-specific expression. Future lightweight celebration may alternate neutral and celebrating full-body poses with a small bounce and individual rhythm; provide reduced motion. See Batch 4 intake notes.",
+      "inspection_notes": "Opaque white rectangular background remains around artwork within an otherwise transparent canvas. Preserved unchanged; transparent re-export recommended before compositing on a coloured scene.",
+      "superseded_by_asset_id": "character.tilly.full-body-neutral"
+    },
+    {
+      "id": "character.lantern.full-body-celebrating.superseded-v1",
+      "path": "assets/originals/batch-04-full-body-pages-44-56/51.png",
+      "kind": "original",
+      "source": "Official creator-supplied Canva PNG export: full body illustrations .zip",
+      "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
+      "sha256": "6ae1a9aa071e52a61b05ebe09637af8ab3d81789a95170666ba286ff2f236ade",
+      "batch_id": "batch-04",
+      "page": 51,
+      "original_filename": "51.png",
+      "width": 2000,
+      "height": 2000,
+      "mode": "RGBA",
+      "has_transparency": true,
+      "content_bounds_px": [
+        457,
+        512,
+        1542,
+        1489
+      ],
+      "status": "superseded",
+      "usage": "standing-and-celebration",
+      "character": "Lantern",
+      "pose": "full-body-celebrating",
+      "name": "Lantern — Full Body Celebrating",
+      "composition_notes": "Full-body illustration for standing scenes or celebrations; keep scale, position and pose alignment configurable. Use existing seated illustrations for boat gameplay.",
+      "reaction_notes": "Preserve the character-specific expression. Future lightweight celebration may alternate neutral and celebrating full-body poses with a small bounce and individual rhythm; provide reduced motion. See Batch 4 intake notes.",
+      "inspection_notes": "Opaque white rectangular background remains around artwork within an otherwise transparent canvas. Preserved unchanged; transparent re-export recommended before compositing on a coloured scene.",
+      "superseded_by_asset_id": "character.lantern.full-body-celebrating"
+    },
+    {
+      "id": "environment.flowering-riverbank-bush.superseded-v1",
+      "path": "assets/originals/batch-09-lake-and-fastest-pages-113-126/119.png",
+      "kind": "original",
+      "source": "Official creator-supplied Canva PNG export: illustrations to use 113-126.zip",
+      "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
+      "sha256": "367b5a8639ecd8ba3f90ffd6c7ffc6f9b14e99e40dfda62b0c25010bca25a6c1",
+      "batch_id": "batch-09",
+      "page": 119,
+      "original_filename": "119.png",
+      "width": 2000,
+      "height": 2000,
+      "mode": "RGBA",
+      "has_transparency": true,
+      "content_bounds_px": [
+        544,
+        0,
+        1456,
+        2000
+      ],
+      "status": "superseded",
+      "usage": "general-lake-environment",
+      "name": "Flowering Riverbank Bush",
+      "composition_notes": "Keep world placement, depth, scale and layering configurable. Enter and leave camera view naturally; maintain clear boats, obstacles and finish-line visibility. Decorative artwork does not imply collisions or gameplay hazards.",
+      "design_notes": "Selective use, not required every race. Keep decorative scenery separate from collision, obstacle and event logic; no gameplay role is implemented by intake.",
+      "challenge_scope": [
+        "fastest",
+        "slowest",
+        "picnic-panic",
+        "wobbly-waters"
+      ],
+      "inspection_notes": "Opaque white vertical rectangle behind bush extends to top and bottom of canvas, with transparency outside. Preserved unchanged; transparent re-export recommended for scene compositing.",
+      "superseded_by_asset_id": "environment.flowering-riverbank-bush"
+    },
+    {
+      "id": "slowest-race.turtle-checkered-flag.superseded-v1",
+      "path": "assets/originals/batch-10-slowest-and-wobbly-pages-127-140/133.png",
+      "kind": "original",
+      "source": "Official creator-supplied Canva PNG export: illustrations to use 127-140.zip",
+      "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
+      "sha256": "9633b1ced30cf6768c2a42906423b38db0dfa1c82d501eac9b2441208abef07b",
+      "batch_id": "batch-10",
+      "page": 133,
+      "original_filename": "133.png",
+      "width": 2000,
+      "height": 2000,
+      "mode": "RGBA",
+      "has_transparency": true,
+      "content_bounds_px": [
+        511,
+        65,
+        1489,
+        2000
+      ],
+      "status": "superseded",
+      "usage": "slowest-race-scene-asset",
+      "name": "Turtle with Checkered Flag",
+      "composition_notes": "Keep scenery placement, scale, layering and animation timing configurable. Support world-stationary elements and independent drift, bobbing or movement without crowding or obscuring boats and characters.",
+      "design_notes": "Decorative, warning, obstacle, encounter or rescue roles require separate approved definitions. Creator examples are possibilities, not mandatory events or implemented gameplay.",
+      "inspection_notes": "Opaque white rectangular backing behind turtle within transparent canvas. Preserved unchanged; transparent re-export recommended before compositing. Content bounds include backing.",
+      "camera_direction": "Slowest Race uses scrolling camera; finish line begins off-screen and enters view as competitors approach.",
+      "superseded_by_asset_id": "slowest-race.turtle-checkered-flag"
+    },
+    {
+      "id": "supporting-effect.jumping-fish.superseded-v1",
+      "path": "assets/originals/batch-11-picnic-and-effects-pages-141-154/154.png",
+      "kind": "original",
+      "source": "Official creator-supplied Canva PNG export: illustrations to use 141-154.zip",
+      "rights": "Creator supplied as official Boat Race artwork for this project; no redistribution licence specified.",
+      "sha256": "61d5c6f350161279d06eb6f88b48747debd78d3cefb30b47b4ba2e167fed3a35",
+      "batch_id": "batch-11",
+      "page": 154,
+      "original_filename": "154.png",
+      "width": 2000,
+      "height": 2000,
+      "mode": "RGBA",
+      "has_transparency": true,
+      "content_bounds_px": [
+        643,
+        219,
+        1358,
+        1781
+      ],
+      "status": "superseded",
+      "usage": "reusable-supporting-effect",
+      "name": "Jumping Fish",
+      "composition_notes": "Keep placement, scale, layering and lightweight animation configurable, separately from gameplay mechanics. Decorative art does not imply collision or gameplay effects.",
+      "design_notes": "Use selectively; creator examples are possible uses, not mandatory events or final rules.",
+      "inspection_notes": "Opaque white vertical rectangle behind fish within transparent canvas. Preserved unchanged; transparent re-export recommended. Content bounds include backing.",
+      "superseded_by_asset_id": "supporting-effect.jumping-fish"
     }
   ]
 }

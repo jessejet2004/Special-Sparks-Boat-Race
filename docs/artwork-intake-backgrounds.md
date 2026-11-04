@@ -26,9 +26,7 @@ The celebration image has a central three-place podium and surrounding ground su
 
 ## Five corrected numbered illustrations
 
-The creator also supplied inline previews corresponding visually to pages 49, 51, 119, 133 and 154. They appear to remove the previous white rectangles, but their downloadable original PNG files are not in `backgrounds.zip` or the workspace. PNG dimensions, alpha values and hashes of those corrections cannot be verified from chat previews. Do not treat a black preview background as proof of transparency or recreate source files from preview pixels.
-
-The original numbered PNGs remain preserved and registered, with the known white-backing flags. Pending corrected-source intake is explicit in the manifest. Supply the five corrected files in a downloadable ZIP to verify and register them separately, preserving both original versions and clear provenance. This does not block backup of the now-complete original 155-image library, but it does prevent claiming those corrections are integrated or backed up.
+At the background intake stage, only inline previews of the corrections were available. The creator has since supplied `remaining illustrations .zip`; all five corrected originals are verified and active. Earlier originals remain preserved unchanged. See [corrected artwork intake](artwork-intake-corrections.md) for exact mappings, provenance and verification.
 
 ## Implementation status
 
