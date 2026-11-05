@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 const origin = "http://127.0.0.1:4174";
 const path = "/special-sparks/boat-race/";
-for (const hostedPath of [path, "/Homeroom-codex-test/"])
+for (const hostedPath of [path, "/Special-Sparks-Boat-Race/"])
   test(`hosted path ${hostedPath} loads all 155 assets and a playable race`, async ({
     page,
   }) => {

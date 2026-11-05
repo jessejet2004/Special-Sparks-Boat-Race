@@ -13,7 +13,7 @@ npm run dev
 
 Vite listens on `0.0.0.0:5173` on a fixed port. Use the local URL on your own development machine, or a real forwarded URL if the Codex client exposes port forwarding. This session currently has no forwarding/public-preview URL tool, so a cloud loopback address or workspace HTML link is not an accessible creator preview.
 
-GitHub Pages is the permanent browser preview. Every push of approved changes to **work** now runs the full checks and deploys only after they pass. Expected site: **https://jessejet2004.github.io/Homeroom-codex-test/** (this is not a claim that the first deployment has succeeded). The repository owner must first set **Settings → Pages → Source: GitHub Actions**, enable Actions if restricted, and allow `work` in any `github-pages` environment branch rules. See [Pages setup and deployment](docs/hosting-and-preview.md). No Cloudflare account is required.
+GitHub Pages is the permanent browser preview. Every push of approved changes to **work** now runs the full checks and deploys only after they pass. Expected site: **https://jessejet2004.github.io/Special-Sparks-Boat-Race/** (this is not a claim that the first deployment has succeeded). The repository owner must first set **Settings → Pages → Source: GitHub Actions**, enable Actions if restricted, and allow `work` in any `github-pages` environment branch rules. See [Pages setup and deployment](docs/hosting-and-preview.md). No Cloudflare account is required.
 
 `npm run build` produces the static website in `dist/`. `npm run preview` serves it on fixed port 4173. `npm run preview:subpath` serves it beneath `/special-sparks/boat-race/` on port 4174 for deployment checks. Relative build links support domain-root and subpath hosting. Optional `VITE_BASE_PATH` selects a fixed deployment prefix. The developer artwork workshop is `/gallery.html` beneath the same deployment path.
 
@@ -33,8 +33,8 @@ Tab and Enter navigate controls; Space activates the race action; **P** pauses a
 ## Reproduce from GitHub
 
 ```sh
-git clone https://github.com/jessejet2004/Homeroom-codex-test.git
-cd Homeroom-codex-test
+git clone https://github.com/jessejet2004/Special-Sparks-Boat-Race.git
+cd Special-Sparks-Boat-Race
 git switch work
 npm ci
 npm run portable

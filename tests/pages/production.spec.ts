@@ -4,7 +4,7 @@ test("the actual Pages production artifact loads artwork and plays offline at it
   page,
   context,
 }) => {
-  const base = "http://127.0.0.1:4175/Homeroom-codex-test/";
+  const base = "http://127.0.0.1:4175/Special-Sparks-Boat-Race/";
   const failures: string[] = [];
   page.on("response", (response) => {
     if (response.status() >= 400) failures.push(response.url());

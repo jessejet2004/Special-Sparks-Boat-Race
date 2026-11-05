@@ -16,6 +16,6 @@ Open http://localhost:8080 and wait for the Offline ready notice before disconne
 
 Touch/mouse: use the large buttons. Keyboard: Tab and Enter navigate; Space activates the race action; P pauses. Optional untimed equipment picking and reduced motion are available on the home screen.
 
-Source, manifests and original artwork: https://github.com/jessejet2004/Homeroom-codex-test/tree/work
+Source, manifests and original artwork: https://github.com/jessejet2004/Special-Sparks-Boat-Race/tree/work
 ''')
 print('Portable package created: artifacts/Boat-Race-Portable.zip')

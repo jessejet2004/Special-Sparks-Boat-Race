@@ -17,7 +17,8 @@ concurrency:
 jobs:
   build:
     if: github.ref == 'refs/heads/work'
-    runs-on: ubuntu-latest
+    # Playwright 1.56.1 supports this runner; ubuntu-latest may move ahead.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Check Pages configuration
@@ -48,7 +49,7 @@ jobs:
           path: dist
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       pages: write
       id-token: write

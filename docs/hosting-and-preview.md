@@ -61,7 +61,7 @@ Deploy the contents of `dist/` at exactly that path. Deploying at an unrelated p
 
 The creator has chosen GitHub Pages rather than Cloudflare. The expected website URL is:
 
-**https://jessejet2004.github.io/Homeroom-codex-test/**
+**https://jessejet2004.github.io/Special-Sparks-Boat-Race/**
 
 This is the expected address, not proof of a successful deployment. The actual deployment must complete before calling it live. The Actions deployment exposes its confirmed `page_url`.
 
@@ -69,7 +69,7 @@ This is the expected address, not proof of a successful deployment. The actual d
 
 `.github/workflows/pages.yml` now triggers on every push to **work**, the branch containing the approved game. It can also be rerun manually where GitHub exposes the workflow. Other branches do not publish. The existing `main` branch still contains the initial repository; it is not the deployment source and need not be reset or changed for automatic push deployments.
 
-Before publishing, the build job checks that Pages is configured, installs from the lockfile, audits the original artwork, builds the portable/default web edition, runs all unit tests and the full Chromium browser suite, then creates a fresh production build with `VITE_BASE_PATH=/Homeroom-codex-test/`. A final Pages-specific browser smoke test then verifies all 155 images and an offline race launch from the actual repository-path artifact. Only that verified final `dist/` artifact is deployed. A failed check prevents the deployment job from running. Original PNG files and source code are not copied into the published static directory; the game uses its verified runtime artwork derivatives.
+Before publishing, the build job checks that Pages is configured, installs from the lockfile, audits the original artwork, builds the portable/default web edition, runs all unit tests and the full Chromium browser suite, then creates a fresh production build with `VITE_BASE_PATH=/Special-Sparks-Boat-Race/`. A final Pages-specific browser smoke test then verifies all 155 images and an offline race launch from the actual repository-path artifact. Only that verified final `dist/` artifact is deployed. A failed check prevents the deployment job from running. Original PNG files and source code are not copied into the published static directory; the game uses its verified runtime artwork derivatives.
 
 The deployment job uses GitHub Pages artifact/OIDC authentication with read-only Pages configuration access for the build, and `pages: write` and `id-token: write` for deployment. No personal access token, Cloudflare installation or committed secret is required. Updates are serialised to avoid overlapping publication. The standalone build remains a secondary download option.
 
@@ -89,7 +89,7 @@ Keep source updates on `work`, run local checks, commit and push. The Pages work
 
 ### Inspecting deployment status
 
-Use the repository's **Actions** page. With API access, `gh run list --workflow pages.yml --branch work` and `gh api repos/jessejet2004/Homeroom-codex-test/pages` can report runs and the site URL. This cloud session can push through GitHub's Git proxy, but its GitHub API requests currently return Forbidden and the API/Pages hostnames are not on its reported network allowlist. Git read/write access alone does not establish API/admin access. A blocked status request is not proof that deployment failed or succeeded. If the environment cannot reach the public Pages hostname, verify the URL in a normal external browser rather than manufacturing a success claim.
+Use the repository's **Actions** page. With API access, `gh run list --workflow pages.yml --branch work` and `gh api repos/jessejet2004/Special-Sparks-Boat-Race/pages` can report runs and the site URL. This cloud session can push through GitHub's Git proxy, but its GitHub API requests currently return Forbidden and the API/Pages hostnames are not on its reported network allowlist. Git read/write access alone does not establish API/admin access. A blocked status request is not proof that deployment failed or succeeded. If the environment cannot reach the public Pages hostname, verify the URL in a normal external browser rather than manufacturing a success claim.
 
 ## Offline, browser updates and caching
 
@@ -116,7 +116,7 @@ After the first real external deployment, verify the actual public URL, a game/r
 - Vite development server started on port 5173; Chromium loaded the actual game and launched a race without page errors. Development status was shown without installing the production offline worker.
 - Build/type checking and all 22 unit tests passed. All 15 browser tests passed, including existing gameplay and offline checks plus the new subpath, cache-isolation and smartboard checks.
 - All 160 preserved original PNGs passed the source-art audit (155 active assets, five archived earlier originals).
-- A separate fixed-base build at `/Homeroom-codex-test/` loaded the game, reached offline readiness, reloaded offline and launched a race successfully. The default relative-base portable build was regenerated afterwards.
+- A separate fixed-base build at `/Special-Sparks-Boat-Race/` loaded the game, reached offline readiness, reloaded offline and launched a race successfully. The default relative-base portable build was regenerated afterwards.
 - The earlier hosting-setup task did not publish an external site. The current Pages task enables automatic publication from `work`; its completion report distinguishes the verified Git push from any confirmed or unconfirmed deployment result.
 
 ## Verify the exact Pages artifact locally
@@ -124,7 +124,7 @@ After the first real external deployment, verify the actual public URL, a game/r
 After the normal suite, run:
 
 ```sh
-VITE_BASE_PATH=/Homeroom-codex-test/ npm run build
+VITE_BASE_PATH=/Special-Sparks-Boat-Race/ npm run build
 npm run test:pages
 ```
 
@@ -132,6 +132,14 @@ The Pages-specific test starts a static server under the real repository path an
 
 ## Automatic Pages workflow verification
 
-The switch to automatic deployment was checked with a successful portable/production build, 22 unit tests, all 16 general browser tests, and the separate Pages-production browser test. The Pages-specific check verified the actual `/Homeroom-codex-test/` artifact, all 155 active artwork files, navigation, offline reload and race launch. The original-art audit passed for all 160 preserved PNG files. No gameplay or original artwork files were changed by this deployment task.
+The switch to automatic deployment was checked with a successful portable/production build, 22 unit tests, all 16 general browser tests, and the separate Pages-production browser test. The Pages-specific check verified the actual `/Special-Sparks-Boat-Race/` artifact, all 155 active artwork files, navigation, offline reload and race launch. The original-art audit passed for all 160 preserved PNG files. No gameplay or original artwork files were changed by this deployment task.
 
 The GitHub API and expected public Pages URL were attempted from this cloud environment, but its network proxy rejected those connections. This is not evidence that the website itself returns an error. The completion report records the pushed commit and whether live deployment could be confirmed; the expected URL must not be described as verified live based solely on a successful push.
+
+## Runner compatibility and repository rename
+
+The browser-running GitHub Actions jobs are pinned to `ubuntu-24.04` because Playwright 1.56.1 does not support the Ubuntu 26.04 image reached through `ubuntu-latest`. The Pages deployment runner is pinned consistently too. The Chromium installation command and every browser test remain enabled; this is an OS compatibility fix, not a test bypass.
+
+The repository is now `jessejet2004/Special-Sparks-Boat-Race`, and the expected Pages URL is **https://jessejet2004.github.io/Special-Sparks-Boat-Race/**. The deployment workflow derives `VITE_BASE_PATH` from `github.event.repository.name`; smoke-test mounts and documentation use the renamed path. No gameplay or artwork changes are needed.
+
+Validation for this compatibility fix passed locally: portable/production builds, all 22 unit tests, all 16 general browser tests, the renamed-repository Pages production browser test, and the full original-artwork audit. Playwright installation and both browser suites remain mandatory in deployment.

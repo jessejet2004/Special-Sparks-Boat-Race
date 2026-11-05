@@ -2,7 +2,8 @@ name: Build and playtest checks
 on: [push, pull_request]
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    # Keep the browser-test OS compatible with pinned Playwright 1.56.1.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

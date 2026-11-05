@@ -23,7 +23,7 @@ export default defineConfig({
     },
     {
       command:
-        "node scripts/serve-static.mjs --port 4174 --mount /special-sparks/boat-race/ --mount /preview/boat-race/ --mount /Homeroom-codex-test/",
+        "node scripts/serve-static.mjs --port 4174 --mount /special-sparks/boat-race/ --mount /preview/boat-race/ --mount /Special-Sparks-Boat-Race/",
       url: "http://127.0.0.1:4174/special-sparks/boat-race/",
       reuseExistingServer: !process.env.CI,
     },
