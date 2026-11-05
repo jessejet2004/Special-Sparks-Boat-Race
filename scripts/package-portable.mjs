@@ -14,6 +14,7 @@ const js = await build({
   format: "esm",
   target: "es2022",
   write: false,
+  define: { "import.meta.env.DEV": "false" },
   minify: true,
   loader: { ".css": "empty" },
 });

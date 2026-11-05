@@ -15,9 +15,17 @@ export default defineConfig({
       args: ["--no-sandbox"],
     },
   },
-  webServer: {
-    command: "npm run preview -- --port 4173",
-    url: "http://127.0.0.1:4173",
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: [
+    {
+      command: "npm run preview",
+      url: "http://127.0.0.1:4173",
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command:
+        "node scripts/serve-static.mjs --port 4174 --mount /special-sparks/boat-race/ --mount /preview/boat-race/",
+      url: "http://127.0.0.1:4174/special-sparks/boat-race/",
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
 });

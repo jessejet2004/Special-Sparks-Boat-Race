@@ -1,0 +1,52 @@
+name: Publish playable website
+
+# Deliberately manual: committing this workflow does not publish artwork publicly.
+on:
+  workflow_dispatch:
+    inputs:
+      publish_publicly:
+        description: 'Publish the official game and runtime artwork to GitHub Pages'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boat-race-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: inputs.publish_publicly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: python3 scripts/audit-artwork.py
+      - name: Build for the repository subpath
+        run: npm run build
+        env:
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish the static website
+        id: deployment
+        uses: actions/deploy-pages@v4

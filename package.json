@@ -14,7 +14,8 @@
     "test": "vitest run",
     "test:browser": "playwright test",
     "audit:artwork": "python3 scripts/audit-artwork.py",
-    "portable": "npm run build && node scripts/package-portable.mjs && python3 scripts/package-portable.py"
+    "portable": "npm run build && node scripts/package-portable.mjs && python3 scripts/package-portable.py",
+    "preview:subpath": "node scripts/serve-static.mjs --port 4174 --mount /special-sparks/boat-race/"
   },
   "devDependencies": {
     "@playwright/test": "1.56.1",

@@ -585,6 +585,13 @@ try {
 }
 
 async function prepareOffline() {
+  if (import.meta.env.DEV) {
+    offlineStatus = "Development preview";
+    document
+      .querySelectorAll(".offline-status")
+      .forEach((e) => (e.textContent = offlineStatus));
+    return;
+  }
   if (portableEdition) {
     offlineStatus = "Portable · offline ready";
     return;
