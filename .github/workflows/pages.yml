@@ -1,17 +1,14 @@
 name: Publish playable website
 
-# Deliberately manual: committing this workflow does not publish artwork publicly.
+# work is the approved preview branch. Failed checks never reach deployment.
 on:
+  push:
+    branches: [work]
   workflow_dispatch:
-    inputs:
-      publish_publicly:
-        description: 'Publish the official game and runtime artwork to GitHub Pages'
-        required: true
-        type: boolean
-        default: false
 
 permissions:
   contents: read
+  pages: read
 
 concurrency:
   group: boat-race-pages
@@ -19,21 +16,33 @@ concurrency:
 
 jobs:
   build:
-    if: inputs.publish_publicly
+    if: github.ref == 'refs/heads/work'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check Pages configuration
+        uses: actions/configure-pages@v5
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npm test
       - run: python3 scripts/audit-artwork.py
+      - run: npm run portable
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - name: Browser gameplay, artwork and hosting checks
+        run: npm run test:browser
+        env:
+          CI: 'true'
       - name: Build for the repository subpath
         run: npm run build
         env:
           VITE_BASE_PATH: /${{ github.event.repository.name }}/
+      - name: Verify the exact Pages production artifact
+        run: npm run test:pages
+        env:
+          CI: 'true'
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

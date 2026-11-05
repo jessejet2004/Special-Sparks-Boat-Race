@@ -57,35 +57,39 @@ VITE_BASE_PATH=/special-sparks/boat-race/ npm run build
 
 Deploy the contents of `dist/` at exactly that path. Deploying at an unrelated path after choosing an absolute base will break JavaScript/CSS links. Do not configure an SPA catch-all that returns HTML for missing PNG/WebP/JS files; there are only the game and developer gallery HTML entries, no client-side route system.
 
-## Recommended persistent preview: Cloudflare Pages
+## Permanent preview: GitHub Pages
 
-This requires a Cloudflare account and permission to connect this GitHub repository. No token needs to be entered in chat or committed to the repo.
+The creator has chosen GitHub Pages rather than Cloudflare. The expected website URL is:
 
-1. In Cloudflare, create a **Pages** project using Git integration and authorise access to `jessejet2004/Homeroom-codex-test`.
-2. Set the production branch to **work**. This matters: the complete game is on `work`; the current `main` branch is still the initial repository.
-3. Select Vite/static hosting. Set build command **npm run build**, output directory **dist**, root directory the repository root. Set build environment variable **NODE_VERSION=24.22.1**. There are no application secrets.
-4. Review that the game and official runtime artwork will be publicly accessible, then deploy. Cloudflare displays the actual `pages.dev` URL only after successful deployment. Test it in a normal browser; do not substitute an expected URL for a confirmed deployment.
+**https://jessejet2004.github.io/Homeroom-codex-test/**
 
-After that one-time setup, pushes to `work` rebuild the website. Cloudflare can generate branch/PR preview deployments too; configure preview branches in the project. A Homeroom custom domain can be connected later by someone with DNS permission. For deployment within an existing Homeroom URL path, publish `dist/` into that website's directory or configure its proxy; a separate Pages subdomain does not automatically become a path on another website.
+This is the expected address, not proof of a successful deployment. The actual deployment must complete before calling it live. The Actions deployment exposes its confirmed `page_url`.
 
-## Vercel alternative
+### Automatic update workflow
 
-`vercel.json` records the static Vite framework, `npm ci`, `npm run build`, and `dist` output. Import the GitHub repository in Vercel, choose **work** as the production branch, and use Node 24. Review public visibility and deploy. Vercel returns the actual live deployment URL and can create previews on future pushes. Connecting Vercel requires account/repository authorisation. No application credentials are needed. Do not create rewrites that turn asset errors into HTML. Service worker and registry responses are configured for revalidation.
+`.github/workflows/pages.yml` now triggers on every push to **work**, the branch containing the approved game. It can also be rerun manually where GitHub exposes the workflow. Other branches do not publish. The existing `main` branch still contains the initial repository; it is not the deployment source and need not be reset or changed for automatic push deployments.
 
-## GitHub Pages alternative: manual publication workflow
+Before publishing, the build job checks that Pages is configured, installs from the lockfile, audits the original artwork, builds the portable/default web edition, runs all unit tests and the full Chromium browser suite, then creates a fresh production build with `VITE_BASE_PATH=/Homeroom-codex-test/`. A final Pages-specific browser smoke test then verifies all 155 images and an offline race launch from the actual repository-path artifact. Only that verified final `dist/` artifact is deployed. A failed check prevents the deployment job from running. Original PNG files and source code are not copied into the published static directory; the game uses its verified runtime artwork derivatives.
 
-`.github/workflows/pages.yml` builds the correct `/<repository-name>/` base and publishes `dist/` using GitHub's Pages artifact/OIDC mechanism. It deliberately has **only a manual trigger**, with `publish_publicly` defaulting to false. Merely committing or pushing this file does not publish publicly.
+The deployment job uses GitHub Pages artifact/OIDC authentication with read-only Pages configuration access for the build, and `pages: write` and `id-token: write` for deployment. No personal access token, Cloudflare installation or committed secret is required. Updates are serialised to avoid overlapping publication. The standalone build remains a secondary download option.
 
-One-time repository-owner setup:
+### One-time settings for the repository owner
 
-1. Make the deployment workflow available on the default branch: either change the default branch to **work**, or review and merge `work` into `main`. GitHub only offers manual workflows present on its default branch; simply selecting `work` in an unavailable workflow is insufficient. Do not reset or overwrite branches to bypass this step.
-2. In **Settings → Pages**, set **Source: GitHub Actions**. The repository/account must support Pages for its visibility/plan. Check organisation rules and any environment approvals with the repository owner.
-3. In **Actions → Publish playable website → Run workflow**, choose the branch with the complete game, explicitly check `publish_publicly`, then run it. Approve the `github-pages` environment if the repository requires that.
-4. The deployment job exposes `page_url`. Verify that URL loads the game and all artwork before sharing it. For this project the workflow uses the repository subpath; configuring a root-level custom domain needs a root-base build instead.
+1. Open repository **Settings → Pages** and set **Build and deployment → Source → GitHub Actions**. The repository visibility/account plan must support Pages. If Pages is unavailable for a private repository, use an eligible plan or review repository visibility; do not change visibility blindly just to enable it.
+2. Ensure **Settings → Actions → General** permits workflows and the official `actions/*` actions used here. The workflow declares the required token permissions itself; organisation restrictions may need an administrator's approval. There is no need to enable broad write access for every workflow.
+3. If **Settings → Environments → github-pages** restricts deployment branches, allow **work**. Approve an environment review if one is configured. Do not leave a default-main-only rule blocking this workflow.
+4. After enabling Pages, open **Actions → Publish playable website**, select the latest `work` run and choose **Re-run all jobs** if its first attempt failed before Pages was enabled. Future approved pushes to `work` trigger automatically. No default-branch change is required for push-triggered runs. GitHub's **Run workflow** button for manual dispatch appears only if the workflow is also available on the default branch; rerunning an existing automatic run does not require that button.
+5. Wait for both build and deploy to succeed, then open the deployment's `page_url` or **Settings → Pages → Visit site**. Confirm the game, all artwork and a race load. A first deployment may take a few minutes to become available.
 
-The workflow requests `contents: read`, `pages: write` and `id-token: write` only where needed; it needs no personal access token or committed deployment secret. Repository administration/Actions/Pages permissions and explicit public publication are the outside prerequisites. This task prepares the workflow but does not change repository settings, merge branches or trigger public publication.
+The workflow publishes the game and runtime artwork publicly, as authorised by the creator's Pages request. A custom domain can be added later by its DNS owner, but a root-level custom domain would need a root-base build instead of the repository subdirectory. Keep the current repository URL until that change is deliberately configured and tested.
 
-Future updates: commit/push to `work`, let CI build/test, then run the publication workflow again when ready. GitHub Pages is manual here; Cloudflare/Vercel are simpler if every push should immediately refresh a persistent preview.
+### Continuing development
+
+Keep source updates on `work`, run local checks, commit and push. The Pages workflow then validates that exact commit and updates the same browser URL. Use branches/PR review to decide which changes are approved for `work`; merging into `main` is not part of this preview workflow. Failed deployments leave the previous successfully deployed site available. Never describe a site as updated until the deployment job succeeds.
+
+### Inspecting deployment status
+
+Use the repository's **Actions** page. With API access, `gh run list --workflow pages.yml --branch work` and `gh api repos/jessejet2004/Homeroom-codex-test/pages` can report runs and the site URL. This cloud session can push through GitHub's Git proxy, but its GitHub API requests currently return Forbidden and the API/Pages hostnames are not on its reported network allowlist. Git read/write access alone does not establish API/admin access. A blocked status request is not proof that deployment failed or succeeded. If the environment cannot reach the public Pages hostname, verify the URL in a normal external browser rather than manufacturing a success claim.
 
 ## Offline, browser updates and caching
 
@@ -113,4 +117,21 @@ After the first real external deployment, verify the actual public URL, a game/r
 - Build/type checking and all 22 unit tests passed. All 15 browser tests passed, including existing gameplay and offline checks plus the new subpath, cache-isolation and smartboard checks.
 - All 160 preserved original PNGs passed the source-art audit (155 active assets, five archived earlier originals).
 - A separate fixed-base build at `/Homeroom-codex-test/` loaded the game, reached offline readiness, reloaded offline and launched a race successfully. The default relative-base portable build was regenerated afterwards.
-- No external site was published and no public/forwarded preview URL was returned by the environment. Vite's internal/local addresses are not supplied as a public creator preview. One-time host/account setup remains the prerequisite for a real shareable website URL.
+- The earlier hosting-setup task did not publish an external site. The current Pages task enables automatic publication from `work`; its completion report distinguishes the verified Git push from any confirmed or unconfirmed deployment result.
+
+## Verify the exact Pages artifact locally
+
+After the normal suite, run:
+
+```sh
+VITE_BASE_PATH=/Homeroom-codex-test/ npm run build
+npm run test:pages
+```
+
+The Pages-specific test starts a static server under the real repository path and checks all active artwork, navigation, offline readiness, offline reload and a race launch. It is a mandatory deployment gate in the Pages workflow. The environment variable above is shell syntax for macOS/Linux; on PowerShell set `$env:VITE_BASE_PATH` before building and remove it afterwards. Regenerate the general portable edition with `npm run portable` after clearing an explicit base.
+
+## Automatic Pages workflow verification
+
+The switch to automatic deployment was checked with a successful portable/production build, 22 unit tests, all 16 general browser tests, and the separate Pages-production browser test. The Pages-specific check verified the actual `/Homeroom-codex-test/` artifact, all 155 active artwork files, navigation, offline reload and race launch. The original-art audit passed for all 160 preserved PNG files. No gameplay or original artwork files were changed by this deployment task.
+
+The GitHub API and expected public Pages URL were attempted from this cloud environment, but its network proxy rejected those connections. This is not evidence that the website itself returns an error. The completion report records the pushed commit and whether live deployment could be confirmed; the expected URL must not be described as verified live based solely on a successful push.

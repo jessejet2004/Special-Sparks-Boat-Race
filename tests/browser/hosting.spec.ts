@@ -1,45 +1,46 @@
 import { test, expect } from "@playwright/test";
 const origin = "http://127.0.0.1:4174";
 const path = "/special-sparks/boat-race/";
-test("hosted subpath loads all 155 assets and the playable race without root requests", async ({
-  page,
-}) => {
-  const failures: string[] = [];
-  page.on("response", (r) => {
-    if (r.status() >= 400) failures.push(r.url());
-  });
-  await page.goto(origin + path + "gallery.html");
-  await expect(page.locator(".asset-card")).toHaveCount(155);
-  await page
-    .locator(".asset-card img")
-    .evaluateAll((imgs) =>
-      imgs.forEach((i) => ((i as HTMLImageElement).loading = "eager")),
-    );
-  await expect
-    .poll(() =>
-      page
-        .locator(".asset-card img")
-        .evaluateAll((imgs) =>
-          imgs.every(
-            (i) =>
-              (i as HTMLImageElement).complete &&
-              (i as HTMLImageElement).naturalWidth > 0,
+for (const hostedPath of [path, "/Homeroom-codex-test/"])
+  test(`hosted path ${hostedPath} loads all 155 assets and a playable race`, async ({
+    page,
+  }) => {
+    const failures: string[] = [];
+    page.on("response", (r) => {
+      if (r.status() >= 400) failures.push(r.url());
+    });
+    await page.goto(origin + hostedPath + "gallery.html");
+    await expect(page.locator(".asset-card")).toHaveCount(155);
+    await page
+      .locator(".asset-card img")
+      .evaluateAll((imgs) =>
+        imgs.forEach((i) => ((i as HTMLImageElement).loading = "eager")),
+      );
+    await expect
+      .poll(() =>
+        page
+          .locator(".asset-card img")
+          .evaluateAll((imgs) =>
+            imgs.every(
+              (i) =>
+                (i as HTMLImageElement).complete &&
+                (i as HTMLImageElement).naturalWidth > 0,
+            ),
           ),
-        ),
-    )
-    .toBe(true);
-  await page.getByRole("link", { name: /Back to the race/ }).click();
-  await expect(page).toHaveURL(origin + path);
-  await page
-    .locator(".challenge-card")
-    .filter({ hasText: "Picnic Panic" })
-    .click();
-  await page.locator("#accept").click();
-  await page.locator("#ready").click();
-  await page.locator("#launch").click();
-  await expect(page.locator("#race-canvas")).toBeVisible();
-  expect(failures).toEqual([]);
-});
+      )
+      .toBe(true);
+    await page.getByRole("link", { name: /Back to the race/ }).click();
+    await expect(page).toHaveURL(origin + hostedPath);
+    await page
+      .locator(".challenge-card")
+      .filter({ hasText: "Picnic Panic" })
+      .click();
+    await page.locator("#accept").click();
+    await page.locator("#ready").click();
+    await page.locator("#launch").click();
+    await expect(page.locator("#race-canvas")).toBeVisible();
+    expect(failures).toEqual([]);
+  });
 test("offline caches are isolated between two hosted paths", async ({
   page,
   context,
