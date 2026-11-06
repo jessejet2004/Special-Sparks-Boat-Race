@@ -49,10 +49,7 @@ test("standalone portable HTML plays with all external network requests blocked"
   );
   await page.locator(".challenge-card").first().click();
   await page.locator("#accept").click();
-  await page
-    .locator(".equipment-card")
-    .filter({ hasText: "Giant Spoon" })
-    .click();
+  await page.locator(".equipment-card").first().click();
   await page.locator("#ready").click();
   await page.locator("#launch").click();
   await expect(page.locator("#race-canvas")).toBeVisible();

@@ -14,16 +14,13 @@ for (const name of [
     await page.clock.install();
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/?seed=22");
-    await page.getByLabel("Take your time: untimed equipment picking").check();
     await page.locator(".challenge-card").filter({ hasText: name }).click();
     await page.getByRole("button", { name: /That’s my boat/ }).click();
-    for (const part of [
-      "Proper-ish Paddle",
-      "Bottle Outriggers",
-      "Turtle-Shell Shield",
-    ])
-      await page.locator(".equipment-card").filter({ hasText: part }).click();
-    await page.getByRole("button", { name: /Ready to race/ }).click();
+    for (let i = 0; i < 3; i++)
+      await page.locator(".equipment-card").nth(i).click();
+    await page
+      .getByRole("button", { name: /Ready to test your masterpiece/ })
+      .click();
     await page
       .getByRole("button", { name: /Launch the extremely official race/ })
       .click();

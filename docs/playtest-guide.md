@@ -5,7 +5,7 @@ Use the GitHub Pages website as the primary preview, or a locally hosted product
 ## A short shared session
 
 1. Let a child choose a challenge and reject/accept boats without coaching. Can they explain the gamble after seeing four offers?
-2. Try a normal 20-second scramble. Notice whether category shortcuts, item names and three equipment slots are understood. Repeat untimed if reading/touch time feels tight.
+2. Explore the untimed Boat Garage. Can children explain the ten choices, follow a part onto the preview, remove/replace it, and read the trade-offs? Try launching with no parts. Notice whether the three slots and ready button are easy to find.
 3. Play Fastest with a propulsion part, Slowest with drag/braking equipment, Picnic with different glide, and Wobbly with stability/flotation. Ask what changed and why they think it changed.
 4. In Picnic, watch whether the target appears soon enough and the stopping estimate supports a deliberate brake. In Wobbly, watch whether warning timing makes brace feel learnable.
 5. Try a silly combination (balloons + rock, spoon + fizz, fan + sail). Does the event/result feedback make the consequence understandable?

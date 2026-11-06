@@ -3,6 +3,7 @@ import { equippedStats } from "./equipment";
 import { characters, type Character, type BoatId } from "../artwork/config";
 import { selectRaceRoster, RACER_COUNT } from "./roster";
 export type Racer = {
+  equipmentSlots: (string | null)[];
   character: Character;
   boat: BoatId;
   equipment: string[];
@@ -65,13 +66,25 @@ export function createRace(
   boatList: BoatId[],
   parts: string[][],
   roster: Character[] = selectRaceRoster(seed),
+  slots: (string | null)[][] = parts.map((ids) =>
+    Array.from({ length: 3 }, (_, i) => ids[i] ?? null),
+  ),
 ): Race {
   if (
     roster.length !== RACER_COUNT ||
     roster[0] !== "lantern" ||
     new Set(roster).size !== RACER_COUNT ||
     boatList.length !== RACER_COUNT ||
-    parts.length !== RACER_COUNT
+    parts.length !== RACER_COUNT ||
+    slots.length !== RACER_COUNT ||
+    slots.some(
+      (s, i) =>
+        s.length !== 3 ||
+        new Set(s.filter((id) => id !== null)).size !==
+          s.filter((id) => id !== null).length ||
+        JSON.stringify(s.filter((id) => id !== null)) !==
+          JSON.stringify(parts[i]),
+    )
   )
     throw Error(
       "A race needs Lantern and three distinct rivals with four boat/loadout entries.",
@@ -92,6 +105,7 @@ export function createRace(
       ).stats;
       return {
         character: c,
+        equipmentSlots: [...slots[i]],
         boat: boatList[i],
         equipment: [...parts[i]],
         stats,

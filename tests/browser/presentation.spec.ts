@@ -54,15 +54,12 @@ for (const viewport of [
     ]) {
       await page.goto("/?seed=22");
       await page
-        .getByLabel("Take your time: untimed equipment picking")
-        .check();
-      await page
         .locator(".challenge-card")
         .filter({ hasText: challenge })
         .click();
       await page.locator("#accept").click();
-      for (const part of ["Party Balloons", "Giant Spoon", "Super Sponge"])
-        await page.locator(".equipment-card").filter({ hasText: part }).click();
+      for (let i = 0; i < 3; i++)
+        await page.locator(".equipment-card").nth(i).click();
       await page.locator("#ready").click();
       await page.locator("#launch").click();
       const canvas = page.locator("#race-canvas");

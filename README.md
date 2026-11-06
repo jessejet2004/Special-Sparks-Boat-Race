@@ -21,14 +21,14 @@ For occasional offline distribution, `npm run portable` still produces **Boat-Ra
 
 ## Controls and rules
 
-Choose a challenge, then accept a boat or reject up to three offers. The fourth distinct offer is compulsory. Tap/click equipment to claim up to three shared parts during the default 20-second scramble; tap a chosen part to put it back. Rivals claim exclusive parts too. Untimed equipment picking is available on the home screen.
+Choose a challenge, then accept a boat or reject up to three offers. The fourth distinct offer is compulsory. Visit the untimed **Boat Garage**: ten varied inventions from the full 28-part library, three clearly labelled slots, and a live preview of Lantern aboard your boat. Tap a card or filled slot to add/remove a part. Launch with zero to three inventions. Rivals choose independently and never take your options.
 
 - **Fastest Race:** reach the line first. Space or the large button gives a short paddling burst, followed by a cooldown.
 - **Slowest Race:** finish last while still finishing. Gentle braking helps; eight seconds stranded or the 115-second course limit means a friendly tow. Rescued boats cannot win over legal finishers.
 - **Picnic Panic:** stop closest to the target. Brake once, then glide. Use the distance and stopping estimate; excessive overshoot receives a tow.
 - **Wobbly Waters:** survive ten increasingly large waves. Brace just before impact; surviving waves, remaining hull and water aboard decide the order.
 
-Tab and Enter navigate controls; Space activates the race action; **P** pauses and **Escape** resumes. Switching tabs automatically pauses. Pause freezes the scramble and simulation; the pause dialog can also leave the race. Reduced motion, optional quiet sound cues and large touch controls are provided. Lantern is the player, alongside three seeded, rotating computer-controlled rivals from the other five characters. Smartboard groups can discuss choices and take turns; this is not a simultaneous multiplayer game.
+Tab and Enter navigate controls; Space activates the race action; **P** pauses and **Escape** resumes. Switching tabs automatically pauses. Pause freezes the race simulation; the pause dialog can also leave the race. Reduced motion, optional quiet sound cues and large touch controls are provided. Lantern is the player, alongside three seeded, rotating computer-controlled rivals from the other five characters. Smartboard groups can discuss choices and take turns; this is not a simultaneous multiplayer game.
 
 ## Reproduce from GitHub
 
@@ -67,6 +67,8 @@ Gameplay rules and seeded fixed-step simulation live in `src/game/`. Canvas rend
 The [official manifest](assets/manifest.json) records **155 active assets plus five archived earlier sources**. All 160 original PNGs remain unchanged. The five white-backed earlier exports are superseded by verified transparent corrections. [Audit](docs/artwork-library-audit.md), [background intake](docs/artwork-intake-backgrounds.md) and [correction intake](docs/artwork-intake-corrections.md) record their provenance. Batch-specific inventories remain in `docs/artwork-intake-batch-*.md`.
 
 `npm run assets` verifies active source hashes and generates cropped/resized WebP runtime derivatives in `public/art/`, with a source-to-runtime registry. The lake's white strips are cropped in the derivative recipe; originals are never changed. A single aspect-preserving backdrop pans within bounds without tiling; world objects and camera move independently. Drawing a prop never creates a collision hazard automatically.
+
+The [Boat Garage report](docs/boat-garage.md) describes balanced offers, independent rivals, preserved slots and the future activation-data foundation.
 
 The [race presentation report](docs/race-presentation-overhaul.md) records the high-DPI diagnosis, source resolutions, per-boat masks/mounts, visual review, and remaining limits. Visual snapshots are checked in under `tests/browser/presentation.spec.ts-snapshots/`; update them intentionally with `npx playwright test tests/browser/presentation.spec.ts --update-snapshots` after reviewing the new compositions.
 

@@ -1,12 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { offers, nextOffer, boats } from "../../src/game/model";
-import {
-  equipment,
-  createScramble,
-  claim,
-  release,
-  equippedStats,
-} from "../../src/game/equipment";
+import { equipment, equippedStats } from "../../src/game/equipment";
 describe("boat gamble", () => {
   it("never repeats rejected offers and forces the fourth", () => {
     for (let seed = 1; seed < 100; seed++) {
@@ -18,20 +12,10 @@ describe("boat gamble", () => {
     }
   });
 });
-describe("shared equipment", () => {
+describe("equipment library", () => {
   it("has exactly the official 28 parts", () => {
     expect(equipment).toHaveLength(28);
     expect(new Set(equipment.map((e) => e.id)).size).toBe(28);
-  });
-  it("prevents stealing, duplicates and a fourth slot, and permits release", () => {
-    const s = createScramble(1);
-    for (const id of s.available.slice(0, 3))
-      expect(claim(s, 0, id)).toBe(true);
-    expect(claim(s, 1, s.claimed[0][0])).toBe(false);
-    expect(claim(s, 0, s.available[0])).toBe(false);
-    const id = s.claimed[0][0];
-    release(s, id);
-    expect(claim(s, 1, id)).toBe(true);
   });
   it("gives combinations and tradeoffs real consequences", () => {
     const base = boats.bathtub.stats;

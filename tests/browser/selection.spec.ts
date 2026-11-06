@@ -1,9 +1,8 @@
 import { test, expect } from "@playwright/test";
-test("four offers, accessible scramble and three exclusive slots", async ({
+test("four offers, untimed garage and three removable slots", async ({
   page,
 }) => {
   await page.goto("/?seed=12");
-  await page.getByLabel("Take your time: untimed equipment picking").check();
   await page.getByRole("button", { name: /FASTEST RACE/i }).click();
   const seen = new Set<string>();
   for (let i = 0; i < 4; i++) {
@@ -15,18 +14,25 @@ test("four offers, accessible scramble and three exclusive slots", async ({
     0,
   );
   await page.getByRole("button", { name: /Make it work/ }).click();
-  await expect(page.locator("#countdown")).toHaveText("∞");
-  for (const name of ["Helpful Duck", "Pool Noodle", "Pet Rock"])
-    await page.locator(".equipment-card").filter({ hasText: name }).click();
+  await expect(page.locator("#countdown")).toHaveCount(0);
+  await expect(page.locator(".equipment-card")).toHaveCount(10);
+  for (let i = 0; i < 3; i++)
+    await page.locator(".equipment-card").nth(i).click();
   await expect(page.locator(".slot.filled")).toHaveCount(3);
-  await page
-    .locator(".equipment-card")
-    .filter({ hasText: "Giant Spoon" })
-    .click();
+  await page.locator(".equipment-card").nth(3).click();
   await expect(page.locator(".slot.filled")).toHaveCount(3);
-  await page.getByRole("button", { name: "Put back Pet Rock" }).click();
+  await page.locator(".slot.filled").nth(1).click();
   await expect(page.locator(".slot.filled")).toHaveCount(2);
-  await page.screenshot({ path: "artifacts/scramble.png", fullPage: true });
+  await page.locator(".equipment-card").nth(3).click();
+  await expect(page.locator(".slot.filled")).toHaveCount(3);
+  await expect(page.locator("#garage-preview")).toHaveAttribute(
+    "data-parts",
+    /.+/,
+  );
+  await page.screenshot({
+    path: "artifacts/garage-desktop.png",
+    fullPage: true,
+  });
 });
 test("home fits tablet and has visible keyboard focus", async ({ page }) => {
   await page.setViewportSize({ width: 768, height: 1024 });

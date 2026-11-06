@@ -1,4 +1,3 @@
-import { RACER_COUNT } from "./roster";
 import type { Stats, Challenge } from "./model";
 export type Equipment = {
   id: string;
@@ -6,6 +5,12 @@ export type Equipment = {
   hint: string;
   delta: Partial<Stats>;
   role: "drive" | "float" | "wild" | "brake";
+  behavior: {
+    mode: "passive" | "activated";
+    durationSeconds?: number;
+    cooldownSeconds?: number;
+    oneUse?: boolean;
+  };
 };
 const e = (
   id: string,
@@ -13,7 +18,15 @@ const e = (
   hint: string,
   delta: Partial<Stats>,
   role: Equipment["role"],
-): Equipment => ({ id, name, hint, delta, role });
+  behavior: Equipment["behavior"] = { mode: "passive" },
+): Equipment => ({
+  id,
+  name,
+  hint,
+  delta,
+  role,
+  behavior,
+});
 export const equipment: Equipment[] = [
   e(
     "helpful-duck",
@@ -255,32 +268,4 @@ export function equippedStats(
   stats.handling = Math.max(1, stats.handling);
   stats.glide = Math.max(1, stats.glide);
   return { stats, combos };
-}
-export type Scramble = {
-  available: string[];
-  claimed: string[][];
-  elapsed: number;
-  nextClaim: number;
-  seed: number;
-};
-export function createScramble(seed: number): Scramble {
-  return {
-    available: equipment.map((e) => e.id),
-    claimed: Array.from({ length: RACER_COUNT }, () => []),
-    elapsed: 0,
-    nextClaim: 2.4,
-    seed,
-  };
-}
-export function claim(s: Scramble, racer: number, id: string) {
-  if (s.claimed[racer].length >= 3 || !s.available.includes(id)) return false;
-  s.available.splice(s.available.indexOf(id), 1);
-  s.claimed[racer].push(id);
-  return true;
-}
-export function release(s: Scramble, id: string) {
-  const i = s.claimed[0].indexOf(id);
-  if (i < 0) return;
-  s.claimed[0].splice(i, 1);
-  s.available.push(id);
 }

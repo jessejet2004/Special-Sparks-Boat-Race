@@ -16,14 +16,7 @@ import {
   random,
   type Challenge,
 } from "./game/model";
-import {
-  equipment,
-  createScramble,
-  claim,
-  release,
-  type Scramble,
-  equippedStats,
-} from "./game/equipment";
+import { equipment, equippedStats } from "./game/equipment";
 import {
   createRace,
   stepRace,
@@ -36,12 +29,21 @@ import {
   type Race,
 } from "./game/race";
 import { selectRaceRoster } from "./game/roster";
+import {
+  createGarage,
+  togglePart,
+  selectedParts,
+  effectDescription,
+} from "./game/garage";
+import { prepareCanvas } from "./rendering/canvas";
+import { drawRaceBoat } from "./rendering/race-boat";
+import { characterGeometry, equipmentAttachments } from "./artwork/race-config";
 import { RaceScene } from "./rendering/scene";
 const app = document.querySelector<HTMLDivElement>("#app")!;
 const art = new Artwork();
 app.innerHTML =
   '<main class="shell"><p class="eyebrow">SPECIAL SPARKS</p><h1>Waking up the river…</h1><p role="status">Getting the official artwork ready.</p></main>';
-let screen: "home" | "selection" | "scramble" | "ready" | "race" | "results" =
+let screen: "home" | "selection" | "garage" | "ready" | "race" | "results" =
     "home",
   challenge: Challenge = "fastest",
   seed =
@@ -51,8 +53,7 @@ let activeRoster: Character[] = selectRaceRoster(seed);
 let offerList = offers(seed),
   offerIndex = 0,
   selected: BoatId = "bathtub",
-  scramble: Scramble = createScramble(seed),
-  untimed = false,
+  garage = createGarage(seed, activeRoster),
   paused = false;
 let race: Race | null = null,
   accumulator = 0,
@@ -85,11 +86,9 @@ function chime(pitch = 440) {
     soundEnabled = false;
   }
 }
-let equipmentFilter = "all";
 let rivalBoats: BoatId[] = [],
   last = performance.now(),
   notice = "",
-  aiTurn = 0,
   showRules = false;
 const reduced = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
@@ -102,7 +101,9 @@ function render() {
   const focus = document.activeElement as HTMLElement | null;
   const focusId = focus?.id;
   const partFocus = focus?.dataset.part;
-  app.innerHTML = `<main class="shell">${header()}${art.errors.size ? '<p class="loading-error" role="alert">Some artwork could not load. Your game still works; reload when connected to restore the illustrations.</p>' : ""}${screen === "home" ? home() : screen === "selection" ? selection() : screen === "scramble" ? scrambleView() : screen === "race" ? raceView() : screen === "results" ? results() : ready()}<footer class="footer"><span>A little ingenuity goes a long way. Probably. <b class="offline-status">${offlineStatus}</b></span>${portableEdition ? "<span>155 official illustrations · portable edition</span>" : '<a href="./gallery.html">Artwork workshop →</a>'}</footer>${paused ? '<div class="paused-overlay" role="dialog" aria-modal="true" aria-label="Game paused"><section class="panel"><p class="eyebrow">EVERYONE IS CATCHING THEIR BREATH</p><h2>Paused. No hurry.</h2><p>The clock and all rivals are waiting.</p><button id="resume">Back to the river →</button><button id="quit" class="secondary">Choose another challenge</button></section></div>' : ""}</main>`;
+  const focusShelf = Boolean(focus?.closest(".invention-grid"));
+  const shelfScroll = document.querySelector(".invention-grid")?.scrollTop ?? 0;
+  app.innerHTML = `<main class="shell">${header()}${art.errors.size ? '<p class="loading-error" role="alert">Some artwork could not load. Your game still works; reload when connected to restore the illustrations.</p>' : ""}${screen === "home" ? home() : screen === "selection" ? selection() : screen === "garage" ? garageView() : screen === "race" ? raceView() : screen === "results" ? results() : ready()}<footer class="footer"><span>A little ingenuity goes a long way. Probably. <b class="offline-status">${offlineStatus}</b></span>${portableEdition ? "<span>155 official illustrations · portable edition</span>" : '<a href="./gallery.html">Artwork workshop →</a>'}</footer>${paused ? '<div class="paused-overlay" role="dialog" aria-modal="true" aria-label="Game paused"><section class="panel"><p class="eyebrow">EVERYONE IS CATCHING THEIR BREATH</p><h2>Paused. No hurry.</h2><p>Your boat and bright ideas are safe.</p><button id="resume">Back to the river →</button><button id="quit" class="secondary">Choose another challenge</button></section></div>' : ""}</main>`;
   document.getElementById("sound")?.addEventListener("click", () => {
     soundEnabled = !soundEnabled;
     chime(660);
@@ -110,7 +111,7 @@ function render() {
   });
   document.getElementById("brand-home")?.addEventListener("click", (e) => {
     e.preventDefault();
-    if (screen === "race" || screen === "scramble") {
+    if (screen === "race" || screen === "garage") {
       paused = true;
       render();
     } else {
@@ -138,15 +139,14 @@ function render() {
     }
   });
   document.getElementById("replay")?.addEventListener("click", () => {
-    screen = "scramble";
+    screen = "garage";
     seed++;
     activeRoster = selectRaceRoster(seed);
-    scramble = createScramble(seed);
+    garage = createGarage(seed, activeRoster);
     rivalBoats = activeRoster.map((_, i) =>
       i === 0 ? selected : boatIds[Math.floor(random(seed + i * 119)() * 7)],
     );
-    aiTurn = 0;
-    notice = "Same boat. Fresh ideas.";
+    notice = "Same boat. Ten fresh inventions.";
     paused = false;
     render();
   });
@@ -169,46 +169,38 @@ function render() {
     showRules = !showRules;
     render();
   });
-  document
-    .getElementById("untimed")
-    ?.addEventListener(
-      "change",
-      (e) => (untimed = (e.target as HTMLInputElement).checked),
-    );
   document.getElementById("accept")?.addEventListener("click", () => {
     selected = offerList[offerIndex];
-    scramble = createScramble(seed);
-    aiTurn = 0;
+    garage = createGarage(seed, activeRoster);
     rivalBoats = activeRoster.map((_, i) =>
       i === 0 ? selected : boatIds[Math.floor(random(seed + i * 119)() * 7)],
     );
-    screen = "scramble";
-    notice = "Pick up to three. Rivals are eyeing the shelves.";
-    void art.load(equipment.map((e) => "equipment." + e.id)).then(render);
+    screen = "garage";
+    notice = "Three inventions. One questionable boat.";
+    void art.load(equipment.map((e) => "equipment." + e.id)).then(() => {
+      if (art.errors.size && screen === "garage") render();
+    });
     render();
   });
   document.getElementById("reject")?.addEventListener("click", () => {
     offerIndex = nextOffer(offerList, offerIndex);
     render();
   });
-  document.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach(
-    (b) =>
-      (b.onclick = () => {
-        equipmentFilter = b.dataset.filter!;
-        render();
-      }),
-  );
   document.querySelectorAll<HTMLButtonElement>("[data-part]").forEach(
     (b) =>
       (b.onclick = () => {
         const id = b.dataset.part!;
-        if (scramble.claimed[0].includes(id)) release(scramble, id);
-        else if (!claim(scramble, 0, id))
-          notice = "Your boat holds three parts. Put one back to try another.";
+        const wasSelected = selectedParts(garage).includes(id);
+        notice = togglePart(garage, id)
+          ? wasSelected
+            ? "Back on the workbench. Another bright idea?"
+            : "An excellent idea. Probably."
+          : "Three inventions aboard. Remove one to try another.";
         render();
+        document.querySelector(".garage-preview")?.classList.add("changed");
       }),
   );
-  document.getElementById("ready")?.addEventListener("click", finishScramble);
+  document.getElementById("ready")?.addEventListener("click", finishGarage);
   document.getElementById("home")?.addEventListener("click", () => {
     screen = "home";
     paused = false;
@@ -225,7 +217,10 @@ function render() {
               seed: race.seed,
               challenge,
               boats: rivalBoats,
-              equipment: scramble.claimed,
+              slots: garage.loadouts,
+              equipment: garage.loadouts.map((slots) =>
+                slots.filter((id): id is string => id !== null),
+              ),
               results: rank(race).map((i) => ({
                 character: race!.racers[i].character,
                 result: resultText(race!, race!.racers[i]),
@@ -244,15 +239,24 @@ function render() {
     a.click();
     URL.revokeObjectURL(a.href);
   });
+  const shelf = document.querySelector(".invention-grid");
+  if (shelf) shelf.scrollTop = shelfScroll;
   if (focusId) document.getElementById(focusId)?.focus({ preventScroll: true });
   else if (partFocus)
     document
       .querySelector<HTMLButtonElement>(
-        `[data-part="${partFocus}"]:not(:disabled)`,
+        `${focusShelf ? ".invention-grid" : ".garage-slots"} [data-part="${partFocus}"]:not(:disabled)`,
+      )
+      ?.focus({ preventScroll: true });
+  if (partFocus && document.activeElement === document.body)
+    document
+      .querySelector<HTMLButtonElement>(
+        `.invention-grid [data-part="${partFocus}"]`,
       )
       ?.focus({ preventScroll: true });
   if (paused) document.getElementById("resume")?.focus();
   drawPreview();
+  if (screen === "garage") void drawGarage();
   if (screen === "race" && race) {
     updateHUD();
     const canvas = document.querySelector<HTMLCanvasElement>("#race-canvas");
@@ -260,61 +264,88 @@ function render() {
   }
 }
 function home() {
-  return `<section class="hero"><div class="hero-copy"><p class="eyebrow">THE SPECIAL SPARKS COLLECTION · NO. 01</p><h1>The Very Serious<br><span>Boat Race.</span><em>(Not Really)</em></h1><p class="intro">Questionable boats. Excellent company.<br>A river full of very good bad ideas.</p><div class="hero-actions"><button id="rules" class="secondary">${showRules ? "Hide the unofficial rules" : "How does this work?"}</button><span class="age-note">AGES 8+<br>1 PLAYER + 3 RIVALS</span></div>${showRules ? '<div class="rule-note">Choose a challenge. Accept a boat or risk the next offer. Grab three parts before your rivals do. Then see if your brilliant plan floats.<br><strong>Mouse, touch or keyboard. Space activates your race action. P pauses.</strong></div>' : ""}<label class="check"><input type="checkbox" id="untimed" ${untimed ? "checked" : ""}> Take your time: untimed equipment picking</label></div><div class="hero-art"><span class="sticker">OFFICIALLY<br>PROBABLY SAFE</span><canvas id="preview" aria-label="Lantern in a bathtub, ready for a ridiculous river race"></canvas><div class="art-caption"><span>MEET YOUR CAPTAIN</span><strong>Lantern</strong><small>Optimism: unsinkable. Boat: debatable.</small></div></div></section><section class="challenge-section"><div class="section-title"><div><p class="eyebrow">PICK YOUR KIND OF RIDICULOUS</p><h2>Four ways to make a splash.</h2></div><span class="small-note">Same river. Very different plans.</span></div><div class="challenge-grid">${(Object.entries(challenges) as [Challenge, typeof challenges.fastest][]).map(([key, c], i) => `<button class="challenge-card" data-challenge="${key}" style="--accent:${c.colour}"><span class="card-number">0${i + 1}</span>${image(c.art, "challenge-art")}<span class="card-kicker">${c.kicker}</span><strong>${c.name}</strong><span>${c.description}</span><b class="card-arrow" aria-hidden="true">→</b></button>`).join("")}</div></section>`;
+  return `<section class="hero"><div class="hero-copy"><p class="eyebrow">THE SPECIAL SPARKS COLLECTION · NO. 01</p><h1>The Very Serious<br><span>Boat Race.</span><em>(Not Really)</em></h1><p class="intro">Questionable boats. Excellent company.<br>A river full of very good bad ideas.</p><div class="hero-actions"><button id="rules" class="secondary">${showRules ? "Hide the unofficial rules" : "How does this work?"}</button><span class="age-note">AGES 8+<br>1 PLAYER + 3 RIVALS</span></div>${showRules ? '<div class="rule-note">Choose a challenge. Accept a boat or risk the next offer. Try up to three inventions in your Boat Garage. Then see if your brilliant plan floats.<br><strong>Mouse, touch or keyboard. Space activates your race action. P pauses.</strong></div>' : ""}<p class="garage-invite">No timer. Plenty of bright ideas.</p></div><div class="hero-art"><span class="sticker">OFFICIALLY<br>PROBABLY SAFE</span><canvas id="preview" aria-label="Lantern in a bathtub, ready for a ridiculous river race"></canvas><div class="art-caption"><span>MEET YOUR CAPTAIN</span><strong>Lantern</strong><small>Optimism: unsinkable. Boat: debatable.</small></div></div></section><section class="challenge-section"><div class="section-title"><div><p class="eyebrow">PICK YOUR KIND OF RIDICULOUS</p><h2>Four ways to make a splash.</h2></div><span class="small-note">Same river. Very different plans.</span></div><div class="challenge-grid">${(Object.entries(challenges) as [Challenge, typeof challenges.fastest][]).map(([key, c], i) => `<button class="challenge-card" data-challenge="${key}" style="--accent:${c.colour}"><span class="card-number">0${i + 1}</span>${image(c.art, "challenge-art")}<span class="card-kicker">${c.kicker}</span><strong>${c.name}</strong><span>${c.description}</span><b class="card-arrow" aria-hidden="true">→</b></button>`).join("")}</div></section>`;
 }
 function selection() {
   const id = offerList[offerIndex],
     b = boats[id];
   return `<div class="stage-heading"><div><p class="eyebrow">${challenges[challenge].name} · STEP 1 OF 3</p><h1>Your first gamble.</h1><p>Keep it… or see what washes up next.</p></div><div class="offer-dots" aria-label="Offer ${offerIndex + 1} of 4">${offerList.map((_, i) => `<i class="${i <= offerIndex ? "active" : ""}"></i>`).join("")}</div></div><section class="selection-scene" style="background-image:url('${art.entries["background.boat-room"].url}')"><div class="selection-preview"><canvas id="preview" aria-label="Lantern seated in ${b.name}"></canvas></div><article class="offer-panel"><p class="eyebrow">OFFER ${offerIndex + 1} OF 4 ${offerIndex === 3 ? "· THIS ONE IS YOURS" : ""}</p><h2>${b.name}</h2><p>${b.description}</p><div class="traits">${b.traits.map((t) => `<span>${t}</span>`).join("")}</div><div class="challenge-tip">${challenges[challenge].rule}</div><button id="accept">${offerIndex === 3 ? "Make it work →" : "That’s my boat →"}</button>${offerIndex < 3 ? `<button id="reject" class="secondary">Risk another (${3 - offerIndex} left)</button>` : '<p class="muted">No more swaps. Destiny has excellent taste.</p>'}</article></section>`;
 }
-function scrambleView() {
-  return `<div class="stage-heading"><div><p class="eyebrow">${challenges[challenge].name} · STEP 2 OF 3</p><h1>A very civilised scramble.</h1><p>Claim up to three parts. One of each. No elbows, please.</p></div><div class="timer" aria-label="Time remaining">${image("supporting-effect.20-second-stopwatch", "timer-art")}<strong id="countdown">${untimed ? "∞" : Math.max(0, 20 - Math.floor(scramble.elapsed))}</strong><span>${untimed ? "TAKE YOUR TIME" : "SECONDS LEFT"}</span></div></div><section class="scramble-board"><aside class="loadout panel"><p class="eyebrow">YOUR ${boats[selected].name.replace("The ", "").toUpperCase()}</p><div class="small-boat">${image("boat." + selected)}</div><h2>Your bright ideas <span>${scramble.claimed[0].length}/3</span></h2><div class="slots">${[
-    0, 1, 2,
-  ]
-    .map((i) => {
-      const id = scramble.claimed[0][i];
-      return id
-        ? `<button class="slot filled" data-part="${id}" aria-label="Put back ${equipment.find((e) => e.id === id)!.name}">${image("equipment." + id)}<span>${equipment.find((e) => e.id === id)!.name}</span><b>×</b></button>`
-        : '<div class="slot">An excellent idea goes here</div>';
-    })
-    .join(
-      "",
-    )}</div><button id="ready">Ready to race →</button><p class="muted">Tap a chosen part to put it back. You can race with fewer than three.</p><div class="rival-claims">${activeRoster
-    .slice(1)
-    .map(
-      (c, i) =>
-        `<div>${image("character." + c + ".full-body-neutral")}<span>${characterName(c)}</span><b>${scramble.claimed[i + 1].length}/3</b></div>`,
-    )
-    .join(
-      "",
-    )}</div></aside><div class="equipment-room" style="background-image:linear-gradient(#fff8e7ec,#fff8e7f5),url('${art.entries["background.boat-room"].url}')"><p class="scramble-notice" role="status">${image("supporting-effect.equipment-crate", "crate-art")}${paused ? "Paused. Your ideas are safe." : notice}</p><div class="equipment-filters" aria-label="Equipment shelves">${[
-    ["all", "All 28"],
-    ["drive", "Propulsion"],
-    ["float", "Stay afloat"],
-    ["wild", "Wild inventions"],
-    ["brake", "Brakes & surprises"],
-  ]
-    .map(
-      ([id, name]) =>
-        `<button data-filter="${id}" aria-pressed="${equipmentFilter === id}">${name}</button>`,
-    )
-    .join("")}</div><div class="equipment-grid">${equipment
-    .filter((e) => equipmentFilter === "all" || e.role === equipmentFilter)
-    .map((e) => {
-      const yours = scramble.claimed[0].includes(e.id),
-        owner = scramble.claimed.findIndex((parts) => parts.includes(e.id)),
-        taken = owner > 0;
-      return `<button class="equipment-card ${yours ? "chosen" : ""} ${taken ? "taken" : ""}" data-part="${e.id}" ${taken ? "disabled" : ""} aria-pressed="${yours}" aria-label="${e.name}. ${e.hint}${taken ? " Claimed by " + characterName(activeRoster[owner]) : ""}">${image("equipment." + e.id)}<strong>${e.name}</strong><span>${taken ? characterName(activeRoster[owner]) + " got it!" : e.hint}</span></button>`;
-    })
-    .join("")}</div></div></section>`;
+function garageView() {
+  const chosen = selectedParts(garage);
+  return `<div class="stage-heading"><div><p class="eyebrow">${challenges[challenge].name} · STEP 2 OF 3</p><h1>The Boat Garage.</h1><p>Three inventions. One questionable boat. Take your time.</p></div><span class="garage-count">${chosen.length} of 3 aboard</span></div>
+ <section class="garage-board"><aside class="garage-boat panel"><p class="eyebrow">YOUR BOAT</p><h2>${boats[selected].name}</h2><div class="garage-preview" style="background-image:url('${art.entries["background.boat-room"].url}')"><canvas id="garage-preview" aria-label="Lantern in ${boats[selected].name} with ${chosen.length} inventions"></canvas></div><h3>Your bright ideas</h3><div class="garage-slots">${garage.loadouts[0].map((id, i) => (id ? `<button class="slot filled" data-part="${id}" aria-label="Remove ${equipment.find((e) => e.id === id)!.name} from slot ${i + 1}"><small>SLOT ${i + 1}</small>${image("equipment." + id)}<span>${equipment.find((e) => e.id === id)!.name}</span><b aria-hidden="true">×</b></button>` : `<div class="slot empty"><small>SLOT ${i + 1}</small><span>A bright idea goes here</span></div>`)).join("")}</div><button id="ready">Ready to test your masterpiece? →</button><p class="muted">Zero to three inventions. Tap one again to remove it.</p><p class="garage-notice" role="status">${notice}</p></aside>
+ <section class="inventions panel" aria-labelledby="inventions-title"><p class="eyebrow">YOUR INVENTIONS</p><h2 id="inventions-title">Ten things that might help.</h2><p>Mix, match and change your mind. Your rivals have their own supplies.</p><div class="invention-grid">${garage.offers
+   .map((id) => {
+     const e = equipment.find((e) => e.id === id)!;
+     const on = chosen.includes(id);
+     return `<button class="equipment-card ${on ? "chosen" : ""}" data-part="${id}" aria-pressed="${on}" aria-label="${e.name}. ${e.hint} ${effectDescription(e)}"><span class="part-state">${on ? "✓ ABOARD" : "+ TRY THIS"}</span>${image("equipment." + id)}<strong>${e.name}</strong><span>${e.hint}</span><small class="part-effect">${effectDescription(e)}</small></button>`;
+   })
+   .join("")}</div></section></section>`;
+}
+async function drawGarage() {
+  const canvas = document.querySelector<HTMLCanvasElement>("#garage-preview");
+  if (!canvas) return;
+  const chosen = selectedParts(garage),
+    boat = selected;
+  await art.loadRace([
+    "boat." + boat,
+    "character.lantern.neutral",
+    ...chosen.map((id) => "equipment." + id),
+  ]);
+  if (!canvas.isConnected) return;
+  const { ctx, width: W, height: H } = prepareCanvas(canvas),
+    im = art.raceImage("boat." + boat);
+  if (!im) return;
+  const person = art.raceImage("character.lantern.neutral");
+  if (!person) return;
+  const geometry = characterGeometry(
+    boat,
+    "lantern",
+    "neutral",
+    1,
+    im.height / im.width,
+    person.height / person.width,
+  );
+  const aspects = Object.fromEntries(
+    chosen.map((id) => {
+      const image = art.raceImage("equipment." + id)!;
+      return [id, image.height / image.width];
+    }),
+  );
+  const attachments = equipmentAttachments(boat, geometry, chosen, aspects);
+  const bounds = [
+    { x: 0, y: 0, width: 1, height: geometry.height },
+    geometry.person,
+    ...attachments.map((a) => a.bounds),
+  ];
+  const left = Math.min(...bounds.map((b) => b.x)),
+    top = Math.min(...bounds.map((b) => b.y));
+  const right = Math.max(...bounds.map((b) => b.x + b.width)),
+    bottom = Math.max(...bounds.map((b) => b.y + b.height));
+  const w = Math.min(
+    520,
+    (W * 0.9) / (right - left),
+    (H * 0.86) / (bottom - top),
+  );
+  const x = (W - w * (right - left)) / 2 - left * w,
+    y = (H - w * (bottom - top)) / 2 - top * w;
+  drawRaceBoat(ctx, art, boat, "lantern", x, y, w, "neutral", chosen);
+  canvas.dataset.parts = chosen.join(",");
 }
 function ready() {
   const combo = equippedStats(
     boats[selected].stats,
-    scramble.claimed[0],
+    selectedParts(garage),
     challenge,
   );
-  return `<section class="race-brief panel"><p class="eyebrow">${challenges[challenge].name} · STEP 3 OF 3</p><h1>Let’s test that theory.</h1><p class="intro">${challenges[challenge].rule}</p><div class="brief-loadout">${scramble.claimed[0].map((id) => image("equipment." + id)).join("")}</div>${combo.combos.map((c) => `<p class="combo-note">${c}</p>`).join("")}<p class="muted">Space or the big action button. P pauses. Your rivals have their own bright ideas.</p><button id="launch">Launch the extremely official race →</button><div class="standby">${image("encounter.teddy-bear-captain.initial")}<span>Teddy’s on standby.<br>Every experiment gets a friendly way home.</span>${image("supporting-effect.ringing-bell")}</div></section>`;
+  return `<section class="race-brief panel"><p class="eyebrow">${challenges[challenge].name} · STEP 3 OF 3</p><h1>Let’s test that theory.</h1><p class="intro">${challenges[challenge].rule}</p><div class="brief-loadout">${selectedParts(
+    garage,
+  )
+    .map((id) => image("equipment." + id))
+    .join(
+      "",
+    )}</div>${combo.combos.map((c) => `<p class="combo-note">${c}</p>`).join("")}<p class="muted">Space or the big action button. P pauses. Your rivals have their own bright ideas.</p><button id="launch">Launch the extremely official race →</button><div class="standby">${image("encounter.teddy-bear-captain.initial")}<span>Teddy’s on standby.<br>Every experiment gets a friendly way home.</span>${image("supporting-effect.ringing-bell")}</div></section>`;
 }
 async function launchRace() {
   const b = document.getElementById("launch") as HTMLButtonElement;
@@ -328,9 +359,9 @@ async function launchRace() {
       (id) =>
         id === "background.lake" ||
         (id.startsWith("equipment.") &&
-          scramble.claimed.some((parts) =>
-            parts.includes(id.slice("equipment.".length)),
-          )) ||
+          garage.loadouts
+            .map((slots) => slots.filter((id): id is string => id !== null))
+            .some((parts) => parts.includes(id.slice("equipment.".length)))) ||
         rivalBoats.some((boat) => id === "boat." + boat) ||
         activeRoster.some(
           (c) =>
@@ -343,8 +374,11 @@ async function launchRace() {
     challenge,
     seed,
     rivalBoats,
-    scramble.claimed,
+    garage.loadouts.map((slots) =>
+      slots.filter((id): id is string => id !== null),
+    ),
     activeRoster,
+    garage.loadouts,
   );
   accumulator = 0;
   finishHold = 0;
@@ -356,7 +390,7 @@ async function launchRace() {
   window.scrollTo({ top: 0 });
 }
 function raceView() {
-  return `<section class="race-header"><div><p class="eyebrow">THE SPECIAL SPARKS RIVER CHAMPIONSHIPS</p><h1>${challenges[challenge].name}</h1></div><div class="race-clock"><strong id="race-time">0.0</strong><span>SECONDS OF GLORY</span></div></section><div class="race-canvas"><canvas id="race-canvas" aria-label="Four illustrated competitors racing on the river"></canvas><div class="race-hint">${challenge === "picnic" ? "Watch the target. Brake early enough to glide." : challenge === "wobbly" ? "Watch the warning. Brace just before the wave." : challenge === "slowest" ? "Finish last. Keep moving. Teddy does not count as a strategy." : "A little paddle burst goes a long way."}</div></div><section class="race-dashboard"><div class="player-readout"><p class="eyebrow">LANTERN · ${boats[selected].name}</p><strong id="race-metric"></strong><span id="race-secondary"></span></div><button id="race-action" class="action-button">${actionLabel()}</button><div class="race-event" role="status" aria-live="polite" id="race-event">And they’re off. Approximately.</div></section><section class="live-standings" aria-label="Live fleet status" id="live-standings"></section><details class="race-rules"><summary>The unofficial rules</summary><p>${challenges[challenge].rule}</p></details>`;
+  return `<section class="race-header"><div><p class="eyebrow">THE SPECIAL SPARKS RIVER CHAMPIONSHIPS</p><h1>${challenges[challenge].name}</h1></div><div class="race-clock"><strong id="race-time">0.0</strong><span>SECONDS OF GLORY</span></div></section><div class="race-canvas"><canvas id="race-canvas" aria-label="Four illustrated competitors racing on the river"></canvas><div class="race-hint">${challenge === "picnic" ? "Watch the target. Brake early enough to glide." : challenge === "wobbly" ? "Watch the warning. Brace just before the wave." : challenge === "slowest" ? "Finish last. Keep moving. Teddy does not count as a strategy." : "A little paddle burst goes a long way."}</div></div><section class="race-dashboard"><div class="player-readout"><p class="eyebrow">LANTERN · ${boats[selected].name}</p><strong id="race-metric"></strong><span id="race-secondary"></span></div><button id="race-action" class="action-button">${actionLabel()}</button><div class="race-event" role="status" aria-live="polite" id="race-event">And they’re off. Approximately.</div></section><section class="race-inventions" aria-label="Your equipment slots">${garage.loadouts[0].map((id, i) => `<div data-slot="${i + 1}" data-equipment="${id ?? ""}"><span>Slot ${i + 1}</span>${id ? image("equipment." + id) + `<strong>${equipment.find((e) => e.id === id)!.name}</strong>` : "<strong>Empty</strong>"}</div>`).join("")}</section><section class="live-standings" aria-label="Live fleet status" id="live-standings"></section><details class="race-rules"><summary>The unofficial rules</summary><p>${challenges[challenge].rule}</p></details>`;
 }
 function actionLabel() {
   return challenge === "fastest"
@@ -465,15 +499,7 @@ async function startSelection() {
   await art.load(offerList.map((b) => "boat." + b));
   render();
 }
-function finishScramble() {
-  const rng = random(seed + 71);
-  for (let i = 1; i < activeRoster.length; i++)
-    while (scramble.claimed[i].length < 3 && scramble.available.length)
-      claim(
-        scramble,
-        i,
-        scramble.available[Math.floor(rng() * scramble.available.length)],
-      );
+function finishGarage() {
   screen = "ready";
   render();
 }
@@ -511,32 +537,6 @@ function drawPreview() {
 function frame(now: number) {
   const dt = Math.min(0.1, (now - last) / 1000);
   last = now;
-  if (screen === "scramble" && !paused) {
-    scramble.elapsed += dt;
-    if (scramble.elapsed >= scramble.nextClaim) {
-      const rival = 1 + (aiTurn % (activeRoster.length - 1));
-      const rng = random(seed + aiTurn * 139);
-      if (scramble.claimed[rival].length < 3 && scramble.available.length) {
-        const id =
-          scramble.available[Math.floor(rng() * scramble.available.length)];
-        claim(scramble, rival, id);
-        notice =
-          characterName(activeRoster[rival]) +
-          " claimed " +
-          equipment.find((e) => e.id === id)!.name +
-          ".";
-      }
-      aiTurn++;
-      scramble.nextClaim += untimed ? 3.2 : 1.05;
-      render();
-    }
-    const clock = document.getElementById("countdown");
-    if (clock)
-      clock.textContent = untimed
-        ? "∞"
-        : String(Math.max(0, Math.ceil(20 - scramble.elapsed)));
-    if (!untimed && scramble.elapsed >= 20) finishScramble();
-  }
   if (screen === "race" && race && !paused) {
     accumulator += dt;
     while (accumulator >= STEP && !race.done) {
@@ -656,3 +656,7 @@ async function prepareOffline() {
     .forEach((e) => (e.textContent = offlineStatus));
 }
 void prepareOffline();
+
+window.addEventListener("resize", () => {
+  if (screen === "garage") void drawGarage();
+});
