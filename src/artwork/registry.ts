@@ -6,10 +6,14 @@ export type Entry = {
   source: string;
   sourceHash: string;
   bounds: number[];
+  width?: number;
+  height?: number;
+  race?: { url: string; width: number; height: number; recipe: string };
 };
 export class Artwork {
   entries: Record<string, Entry> = {};
   images = new Map<string, HTMLImageElement>();
+  raceImages = new Map<string, HTMLImageElement>();
   errors = new Set<string>();
   pending = new Map<string, Promise<void>>();
   async init() {
@@ -44,6 +48,34 @@ export class Artwork {
         return task;
       }),
     );
+  }
+  async loadRace(ids: string[]) {
+    await this.load(ids);
+    await Promise.all(
+      [...new Set(ids)].map((id) => {
+        const entry = this.entries[id];
+        if (!entry?.race || this.raceImages.has(id)) return;
+        const key = "race:" + id;
+        if (this.pending.has(key)) return this.pending.get(key);
+        const task = new Promise<void>((resolve) => {
+          const image = new Image();
+          image.onload = () => {
+            this.raceImages.set(id, image);
+            resolve();
+          };
+          image.onerror = () => {
+            this.errors.add(key);
+            resolve();
+          };
+          image.src = entry.race!.url;
+        });
+        this.pending.set(key, task);
+        return task;
+      }),
+    );
+  }
+  raceImage(id: string) {
+    return this.raceImages.get(id) ?? this.images.get(id);
   }
   image(id: string) {
     return this.images.get(id);

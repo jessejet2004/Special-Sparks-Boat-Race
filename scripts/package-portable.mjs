@@ -4,10 +4,15 @@ await fs.mkdir("artifacts", { recursive: true });
 const registry = JSON.parse(
   await fs.readFile("public/art/registry.json", "utf8"),
 );
-for (const e of Object.values(registry))
+for (const e of Object.values(registry)) {
   e.url =
     "data:image/webp;base64," +
     (await fs.readFile("public/" + e.url)).toString("base64");
+  if (e.race)
+    e.race.url =
+      "data:image/webp;base64," +
+      (await fs.readFile("public/" + e.race.url)).toString("base64");
+}
 const js = await build({
   entryPoints: ["src/main.ts"],
   bundle: true,

@@ -4,11 +4,28 @@ const path = "/special-sparks/boat-race/";
 for (const hostedPath of [path, "/Special-Sparks-Boat-Race/"])
   test(`hosted path ${hostedPath} loads all 155 assets and a playable race`, async ({
     page,
+    request,
   }) => {
     const failures: string[] = [];
     page.on("response", (r) => {
       if (r.status() >= 400) failures.push(r.url());
     });
+    const registry = await (
+      await request.get(origin + hostedPath + "art/registry.json")
+    ).json();
+    const variants = Object.values(registry).filter((e: any) => e.race) as {
+      bounds: number[];
+      race: { url: string; width: number; height: number };
+    }[];
+    expect(variants).toHaveLength(72);
+    for (const e of variants) {
+      expect(e.race.width).toBeLessThanOrEqual(e.bounds[2] - e.bounds[0]);
+      expect(e.race.height).toBeLessThanOrEqual(e.bounds[3] - e.bounds[1]);
+    }
+    const variantResponses = await Promise.all(
+      variants.map((e) => request.get(origin + hostedPath + e.race.url)),
+    );
+    expect(variantResponses.every((r) => r.ok())).toBe(true);
     await page.goto(origin + hostedPath + "gallery.html");
     await expect(page.locator(".asset-card")).toHaveCount(155);
     await page

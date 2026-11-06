@@ -1,6 +1,7 @@
 import { boats, random, type Challenge, type Stats } from "./model";
 import { equippedStats } from "./equipment";
 import { characters, type Character, type BoatId } from "../artwork/config";
+import { selectRaceRoster, RACER_COUNT } from "./roster";
 export type Racer = {
   character: Character;
   boat: BoatId;
@@ -63,7 +64,18 @@ export function createRace(
   seed: number,
   boatList: BoatId[],
   parts: string[][],
+  roster: Character[] = selectRaceRoster(seed),
 ): Race {
+  if (
+    roster.length !== RACER_COUNT ||
+    roster[0] !== "lantern" ||
+    new Set(roster).size !== RACER_COUNT ||
+    boatList.length !== RACER_COUNT ||
+    parts.length !== RACER_COUNT
+  )
+    throw Error(
+      "A race needs Lantern and three distinct rivals with four boat/loadout entries.",
+    );
   const rng = random(seed),
     types = ["fisherman", "seal", "river-monster", "potato-cannon"];
   const chosen = [types[Math.floor(rng() * 4)], types[Math.floor(rng() * 4)]];
@@ -72,7 +84,7 @@ export function createRace(
     seed,
     time: 0,
     tick: 0,
-    racers: characters.map((c, i) => {
+    racers: roster.map((c, i) => {
       const stats = equippedStats(
         boats[boatList[i]].stats,
         parts[i],
@@ -108,7 +120,7 @@ export function createRace(
     encounters: chosen.map((kind, i) => ({
       at: 10 + i * 15,
       kind,
-      racer: Math.floor(rng() * 6),
+      racer: Math.floor(rng() * roster.length),
       warned: false,
       fired: false,
     })),
@@ -345,7 +357,9 @@ export function stepRace(r: Race) {
     drive *= 1 - Math.min(0.35, p.water / 200);
     if (p.impairUntil > r.time) drive *= 0.65;
     if (i > 0) {
-      const personality = [1, 1.04, 1.02, 0.97, 1.06, 0.96][i];
+      const personality = [1, 1.04, 1.02, 0.97, 1.06, 0.96][
+        characters.indexOf(p.character)
+      ];
       drive *= personality * (1 + Math.sin(r.time * 0.7 + i) * 0.035);
     }
     if (r.challenge === "fastest" && p.boostUntil > r.time) drive += 12;

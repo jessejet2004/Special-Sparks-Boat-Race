@@ -1,6 +1,6 @@
 # First proper Boat Race playtest
 
-Use the portable HTML or locally hosted production build. For hosted offline play, wait for **Offline ready** before disconnecting. Keep the console closed during the child-facing session; the game should explain itself.
+Use the GitHub Pages website as the primary preview, or a locally hosted production build. The portable HTML remains available for standalone use. For hosted offline play, wait for **Offline ready** before disconnecting. Keep the console closed during the child-facing session; the game should explain itself.
 
 ## A short shared session
 
@@ -10,7 +10,8 @@ Use the portable HTML or locally hosted production build. For hosted offline pla
 4. In Picnic, watch whether the target appears soon enough and the stopping estimate supports a deliberate brake. In Wobbly, watch whether warning timing makes brace feel learnable.
 5. Try a silly combination (balloons + rock, spoon + fizz, fan + sail). Does the event/result feedback make the consequence understandable?
 6. Let someone need a rescue. Can they identify what happened, find themselves in the results and want another go?
-7. On the actual tablet/smartboard, try touch, keyboard focus, reduced motion, pause, leaving/resuming and offline replay. Check boat/character visibility from the back of the room.
+7. Follow Lantern’s gold waterline marker and YOU label. Are all four racers identifiable? Try new seeds: all five rivals should appear across sessions, with two cheering at results. Compare raft, welly and basket poses, including three overhead/water equipment items.
+8. On the actual tablet/smartboard, try touch, keyboard focus, reduced motion, pause, leaving/resuming and offline replay. Check boat/character visibility from the back of the room.
 
 ## Capture useful feedback
 

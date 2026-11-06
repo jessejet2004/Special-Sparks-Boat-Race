@@ -1,3 +1,4 @@
+import { RACER_COUNT } from "./roster";
 import type { Stats, Challenge } from "./model";
 export type Equipment = {
   id: string;
@@ -265,7 +266,7 @@ export type Scramble = {
 export function createScramble(seed: number): Scramble {
   return {
     available: equipment.map((e) => e.id),
-    claimed: [[], [], [], [], [], []],
+    claimed: Array.from({ length: RACER_COUNT }, () => []),
     elapsed: 0,
     nextClaim: 2.4,
     seed,

@@ -1,19 +1,21 @@
 import { Artwork } from "../artwork/registry";
-import { drawBoat, drawImage } from "./composite";
-import { type Race, rank } from "../game/race";
-import { characterNames } from "../artwork/config";
+import { drawImage } from "./composite";
+import { type Race } from "../game/race";
+import { characterName } from "../artwork/config";
 import { cameraPlan } from "./camera";
+import { prepareCanvas } from "./canvas";
+import { fleetLayout } from "./fleet-layout";
+import { drawRaceBoat } from "./race-boat";
+import { racePlacements } from "../artwork/race-config";
 export class RaceScene {
   camera = 0;
   constructor(public art: Artwork) {}
   draw(canvas: HTMLCanvasElement, r: Race, reduced: boolean) {
-    const W = Math.max(360, Math.round(canvas.clientWidth)),
-      H = Math.max(300, Math.round(canvas.clientHeight));
-    if (canvas.width !== W || canvas.height !== H) {
-      canvas.width = W;
-      canvas.height = H;
-    }
-    const ctx = canvas.getContext("2d")!;
+    const { ctx, width: W, height: H } = prepareCanvas(canvas);
+    const waveMode = r.challenge === "wobbly";
+    const layout = fleetLayout(W, H, waveMode);
+    canvas.dataset.racerCount = String(r.racers.length);
+    canvas.dataset.boatWidth = String(layout.boatWidth);
     const fleet = r.racers
       .filter((p) => p.status !== "rescued")
       .map((p) => p.x)
@@ -27,22 +29,24 @@ export class RaceScene {
       middle,
       W,
       reduced,
+      layout.origin,
     );
-    const waveMode = r.challenge === "wobbly";
     this.camera = reduced ? goal : this.camera + (goal - this.camera) * 0.07;
-    const bg = this.art.image("background.lake");
+    const bg = this.art.raceImage("background.lake");
     if (bg) {
-      const scale = Math.max(W / bg.width, (H * 1.7) / bg.height);
+      const scale = Math.max(W / bg.width, (H * 2.1) / bg.height);
       const margin = bg.width * scale - W;
       ctx.drawImage(
         bg,
-        -(reduced ? margin * 0.5 : margin * Math.min(1, middle / r.target)),
-        H * 0.26 - bg.height * scale * 0.55,
+        -(reduced
+          ? margin * 0.5
+          : margin * (0.35 + 0.3 * Math.min(1, middle / r.target))),
+        H * 0.08 - bg.height * scale * 0.55,
         bg.width * scale,
         bg.height * scale,
       );
     }
-    const world = (x: number) => (x - this.camera) * worldScale + 110;
+    const world = (x: number) => (x - this.camera) * worldScale + layout.origin;
     // Deliberate course placements, independent from collisions.
     const scenery = [
       "environment.lily-pads-pink-flower",
@@ -53,16 +57,16 @@ export class RaceScene {
       "environment.wooden-jetty",
       "environment.flowering-riverbank-bush",
     ];
-    for (let i = 0; i < 12; i++) {
-      const x = world(i * 130 - 40);
+    for (let i = 0; i < 8; i++) {
+      const x = world(i * 190 - 40);
       if (x > -150 && x < W + 100)
         drawImage(
           ctx,
           this.art,
           scenery[(i * 3 + 2) % 7],
           x,
-          H * 0.18 + (i % 2) * 7,
-          60 + (i % 3) * 13,
+          H * 0.11 + (i % 2) * 7,
+          48 + (i % 3) * 10,
         );
     }
     const props: Record<string, string[]> = {
@@ -94,24 +98,25 @@ export class RaceScene {
         "wobbly-waters.little-shipwreck",
       ],
     };
-    props[r.challenge].forEach((id, i) => {
-      const x = waveMode
-        ? 30 + (i * (W - 100)) / 6
-        : world(
-            60 +
-              (i * (r.target - 120)) /
-                Math.max(1, props[r.challenge].length - 1),
+    props[r.challenge]
+      .filter((_, i, all) => all.length <= 3 || i % 2 === r.seed % 2)
+      .forEach((id, i, visibleProps) => {
+        const x = waveMode
+          ? 30 + (i * (W - 100)) / 6
+          : world(
+              60 +
+                (i * (r.target - 120)) / Math.max(1, visibleProps.length - 1),
+            );
+        if (x > -100 && x < W + 50)
+          drawImage(
+            ctx,
+            this.art,
+            id,
+            x,
+            H * 0.1 - (i % 2) * 12,
+            55 + (i % 3) * 10,
           );
-      if (x > -100 && x < W + 50)
-        drawImage(
-          ctx,
-          this.art,
-          id,
-          x,
-          H * 0.18 - (i % 2) * 18,
-          55 + (i % 3) * 10,
-        );
-    });
+      });
     if (!waveMode) {
       const finish = world(r.target);
       if (finish > -100 && finish < W + 200) {
@@ -170,7 +175,7 @@ export class RaceScene {
       const until = r.nextWave - r.time;
       const progress = Math.max(0, 1 - until / 4.5);
       if (until < 2.5 && r.wave < 10) {
-        const wx = reduced ? 1050 : W - progress * W;
+        const wx = reduced ? W * 0.85 : W - progress * W;
         ctx.save();
         ctx.globalAlpha = 0.35;
         ctx.strokeStyle = "#e7fcff";
@@ -201,23 +206,28 @@ export class RaceScene {
           32,
         );
     }
-    const standings = rank(r);
+    const positions = r.racers.map((p, i) => {
+      const image = this.art.raceImage("boat." + p.boat)!;
+      const width = layout.boatWidth,
+        height = (width * image.height) / image.width;
+      return {
+        x: waveMode ? layout.anchors[i].x : world(p.x),
+        y: layout.anchors[i].waterY - height * racePlacements[p.boat].waterline,
+        width,
+        waterY: layout.anchors[i].waterY,
+        height,
+      };
+    });
     r.racers.forEach((p, i) => {
-      let x = waveMode ? 35 + ((i % 3) * (W - 80)) / 3 : world(p.x),
-        y = waveMode
-          ? H * 0.35 + Math.floor(i / 3) * H * 0.31
-          : H * 0.28 + i * H * 0.11;
-      const width = waveMode
-        ? Math.min(170, (W - 120) / 3)
-        : Math.max(80, Math.min(116, H * 0.18));
-      if (!waveMode && (x < 0 || x > W - 80)) {
+      const { x, y, width, waterY } = positions[i];
+      if (!waveMode && (x < 0 || x > W - width * 0.2)) {
         ctx.fillStyle = i === 0 ? "#124c4d" : "#375e5c";
         ctx.font = "bold 12px sans-serif";
         ctx.textAlign = x < 0 ? "left" : "right";
         ctx.fillText(
-          `${x < 0 ? "◀ " : ""}${characterNames[i]}${x > W - 80 ? " ▶" : ""}`,
+          `${x < 0 ? "◀ " : ""}${characterName(p.character)}${x > W - width * 0.2 ? " ▶" : ""}`,
           x < 0 ? 10 : W - 10,
-          y + 30,
+          waterY + 12,
         );
         return;
       }
@@ -243,9 +253,26 @@ export class RaceScene {
                       p.character === "dizzy"
                     ? "looking-back"
                     : "paddling";
+      if (i === 0) {
+        ctx.save();
+        ctx.strokeStyle = "#f8d56b";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.ellipse(
+          x + width * 0.48,
+          waterY,
+          width * 0.46,
+          6,
+          0,
+          0,
+          Math.PI * 2,
+        );
+        ctx.stroke();
+        ctx.restore();
+      }
       if (p.status === "rescued") {
         ctx.globalAlpha = 0.45;
-        drawBoat(
+        drawRaceBoat(
           ctx,
           this.art,
           p.boat,
@@ -279,11 +306,11 @@ export class RaceScene {
           this.art,
           "wobbly-waters.floating-rescue-ring",
           x - 15,
-          y + 30,
+          waterY + 12,
           35,
         );
       } else
-        drawBoat(
+        drawRaceBoat(
           ctx,
           this.art,
           p.boat,
@@ -299,12 +326,13 @@ export class RaceScene {
         );
       ctx.font = `${i === 0 ? "bold " : ""}12px sans-serif`;
       ctx.textAlign = "center";
-      const label = characterNames[i] + (i === 0 ? " · YOU" : "");
+      const label = characterName(p.character) + (i === 0 ? " · YOU" : "");
       const labelWidth = ctx.measureText(label).width + 18;
-      const nameX = waveMode
-        ? x + width / 2 - labelWidth / 2
-        : Math.max(4, x - labelWidth - 9);
-      const nameY = waveMode ? y + width * 0.73 : y + width * 0.42;
+      const nameX = Math.max(
+        8,
+        Math.min(W - labelWidth - 8, x + width * 1.22 + 8),
+      );
+      const nameY = waterY - 30;
       ctx.fillStyle = i === 0 ? "#123e43" : "#fffbeaee";
       ctx.beginPath();
       ctx.roundRect(nameX, nameY, labelWidth, 23, 9);
@@ -313,11 +341,11 @@ export class RaceScene {
       ctx.fillText(label, nameX + labelWidth / 2, nameY + 16);
       if (waveMode) {
         ctx.fillStyle = "#ffffffba";
-        ctx.fillRect(x + 15, y + width * 0.73 + 30, width - 30, 5);
+        ctx.fillRect(x + 15, waterY + 35, width - 30, 5);
         ctx.fillStyle = p.hull > 35 ? "#2b8169" : "#c26537";
         ctx.fillRect(
           x + 15,
-          y + width * 0.73 + 30,
+          waterY + 35,
           (width - 30) * Math.max(0, p.hull / p.stats.durability),
           5,
         );
@@ -334,14 +362,11 @@ export class RaceScene {
             (e.kind === "damage" && e.id % 7 === 0)),
       )
       .slice(-2)) {
-      const p = r.racers[e.racer],
-        age = r.time - e.time;
-      const x = waveMode
-          ? 100 + ((e.racer % 3) * (W - 80)) / 3
-          : world(p.x) + 65,
-        y = waveMode
-          ? H * 0.4 + Math.floor(e.racer / 3) * H * 0.31
-          : H * 0.32 + e.racer * H * 0.095;
+      const position = positions[e.racer];
+      if (!position) continue;
+      const age = r.time - e.time,
+        x = position.x + position.width * 0.8,
+        y = position.waterY - 12;
       ctx.save();
       ctx.translate(
         x + (reduced ? 0 : age * 18),

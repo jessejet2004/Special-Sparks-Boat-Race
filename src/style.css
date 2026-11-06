@@ -188,3 +188,34 @@ label {
     scroll-behavior: auto !important;
   }
 }
+.seat-matrix-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+.seat-review {
+  min-width: 0;
+  text-align: center;
+  background: #dceff0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.seat-review canvas {
+  height: 190px;
+  width: 100%;
+}
+.seat-review span {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px;
+}
+.gallery-layout .controls {
+  max-height: 650px;
+  overflow: auto;
+}
+@media (max-width: 760px) {
+  .seat-matrix-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

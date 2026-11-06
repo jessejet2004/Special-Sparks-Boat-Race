@@ -28,7 +28,7 @@ Choose a challenge, then accept a boat or reject up to three offers. The fourth 
 - **Picnic Panic:** stop closest to the target. Brake once, then glide. Use the distance and stopping estimate; excessive overshoot receives a tow.
 - **Wobbly Waters:** survive ten increasingly large waves. Brace just before impact; surviving waves, remaining hull and water aboard decide the order.
 
-Tab and Enter navigate controls; Space activates the race action; **P** pauses and **Escape** resumes. Switching tabs automatically pauses. Pause freezes the scramble and simulation; the pause dialog can also leave the race. Reduced motion, optional quiet sound cues and large touch controls are provided. Lantern is the player, alongside five computer-controlled rivals. Smartboard groups can discuss choices and take turns; this is not a six-player simultaneous game.
+Tab and Enter navigate controls; Space activates the race action; **P** pauses and **Escape** resumes. Switching tabs automatically pauses. Pause freezes the scramble and simulation; the pause dialog can also leave the race. Reduced motion, optional quiet sound cues and large touch controls are provided. Lantern is the player, alongside three seeded, rotating computer-controlled rivals from the other five characters. Smartboard groups can discuss choices and take turns; this is not a simultaneous multiplayer game.
 
 ## Reproduce from GitHub
 
@@ -62,11 +62,13 @@ The ZIP includes the standalone HTML, complete local web build and launch instru
 
 ## Architecture and artwork
 
-Gameplay rules and seeded fixed-step simulation live in `src/game/`. Canvas rendering lives in `src/rendering/`; HTML controls/results are in `src/main.ts`. Character fallback poses, per-boat seats, foreground masks, waterlines and mounts are in `src/artwork/`. The gallery exports placement JSON to copy into `src/artwork/config.ts` and commit. Runtime dependencies: none; build/test tools are development-only.
+Gameplay rules and seeded fixed-step simulation live in `src/game/`. Canvas rendering lives in `src/rendering/`; HTML controls/results are in `src/main.ts`. Character fallback poses, per-boat seats, foreground masks, waterlines and mounts are in `src/artwork/`. The gallery has separate race/selection composition modes, three equipment selectors, alignment guides, and an all-42-seats review matrix. Export race placement JSON into `src/artwork/race-config.ts`; selection values stay in `src/artwork/config.ts`. Commit adjustments. Runtime dependencies: none; build/test tools are development-only.
 
 The [official manifest](assets/manifest.json) records **155 active assets plus five archived earlier sources**. All 160 original PNGs remain unchanged. The five white-backed earlier exports are superseded by verified transparent corrections. [Audit](docs/artwork-library-audit.md), [background intake](docs/artwork-intake-backgrounds.md) and [correction intake](docs/artwork-intake-corrections.md) record their provenance. Batch-specific inventories remain in `docs/artwork-intake-batch-*.md`.
 
 `npm run assets` verifies active source hashes and generates cropped/resized WebP runtime derivatives in `public/art/`, with a source-to-runtime registry. The lake's white strips are cropped in the derivative recipe; originals are never changed. A single aspect-preserving backdrop pans within bounds without tiling; world objects and camera move independently. Drawing a prop never creates a collision hazard automatically.
+
+The [race presentation report](docs/race-presentation-overhaul.md) records the high-DPI diagnosis, source resolutions, per-boat masks/mounts, visual review, and remaining limits. Visual snapshots are checked in under `tests/browser/presentation.spec.ts-snapshots/`; update them intentionally with `npx playwright test tests/browser/presentation.spec.ts --update-snapshots` after reviewing the new compositions.
 
 The [original design brief](docs/boat-race-design-brief-v1.md), [approved architecture proposal](docs/boat-race-development-proposal.md), [implemented defaults](docs/gameplay-decisions.md) and [playtest guide](docs/playtest-guide.md) explain scope and the first balance pass.
 
@@ -76,4 +78,4 @@ Follow [AGENTS.md](AGENTS.md). Completed stages are committed and pushed to `wor
 
 ## Current limits
 
-This is a first playable balance pass, not a tuned competitive game. It is a single player experience with five rivals, no online multiplayer or saved campaign. Only brief synthesised sound cues are included; there is no music or supplied voice audio. Chromium is the automated browser target; Safari/iPad, Firefox and actual classroom hardware still need human playtesting. The cloud browser blocks direct `file://` navigation by policy, so the standalone document is tested as a self-contained response with external network access blocked; test double-click launch on the intended school device too.
+This is a first playable balance pass, not a tuned competitive game. It is a single player experience with three rivals, no online multiplayer or saved campaign. Only brief synthesised sound cues are included; there is no music or supplied voice audio. Chromium is the automated browser target; Safari/iPad, Firefox and actual classroom hardware still need human playtesting. The cloud browser blocks direct `file://` navigation by policy, so the standalone document is tested as a self-contained response with external network access blocked; test double-click launch on the intended school device too.

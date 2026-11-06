@@ -5,12 +5,16 @@ export function cameraPlan(
   fleetPosition: number,
   width: number,
   reduced = false,
+  origin = 110,
 ) {
   // Fixed scale for a challenge/viewport, never fitted to the spread of the fleet.
   const scale = Math.max(1.55, (width * 1.22) / target);
-  let goal = Math.max(0, fleetPosition - (width * 0.32) / scale);
+  let goal = Math.max(
+    0,
+    fleetPosition - Math.max(0, width * 0.3 - origin) / scale,
+  );
   if (challenge === "picnic")
-    goal = Math.min(goal, target - (width * 0.64) / scale);
+    goal = Math.min(goal, target - Math.max(40, width * 0.7 - origin) / scale);
   if (challenge === "wobbly") goal = 0;
   if (reduced)
     goal =

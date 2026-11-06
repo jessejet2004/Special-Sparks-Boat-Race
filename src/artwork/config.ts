@@ -127,3 +127,7 @@ export function poseId(character: Character, pose: string) {
   if (pose === "looking-back" && character === "lantern") pose = "surprised";
   return `character.${character}.${pose}`;
 }
+
+export function characterName(character: Character) {
+  return characterNames[characters.indexOf(character)];
+}

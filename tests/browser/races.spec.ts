@@ -5,7 +5,7 @@ for (const name of [
   "Picnic Panic",
   "Wobbly Waters",
 ])
-  test(`${name}: playable start, action, pause, and six results`, async ({
+  test(`${name}: playable start, action, pause, and four results`, async ({
     page,
   }) => {
     test.setTimeout(180000);
@@ -53,7 +53,9 @@ for (const name of [
         await page.locator("#race-action").click();
       await page.clock.runFor(4000);
     }
-    await expect(page.locator(".results-table li")).toHaveCount(6);
+    await expect(page.locator(".results-table li")).toHaveCount(4);
+    await expect(page.locator(".celebrant")).toHaveCount(6);
+    await expect(page.locator(".spectator")).toHaveCount(2);
     await expect(
       page.getByRole("button", { name: "Choose another challenge" }),
     ).toBeVisible();

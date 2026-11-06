@@ -19,7 +19,7 @@ const parts = [
   ["turtle-shell-shield"],
 ];
 function run(c: Challenge, b: BoatId = boatIds[0], seed = 123) {
-  const r = createRace(c, seed, [b, ...boatIds.slice(1, 6)], parts);
+  const r = createRace(c, seed, [b, ...boatIds.slice(1, 4)], parts.slice(0, 4));
   for (let n = 0; n < 2500 && !r.done; n++) {
     if (
       c === "picnic" &&
@@ -38,12 +38,12 @@ for (const challenge of [
   "wobbly",
 ] as Challenge[])
   describe(challenge, () => {
-    it("completes for all seven boats with six finite ranked results", () => {
+    it("completes for all seven boats with four finite ranked results", () => {
       for (const boat of boatIds) {
         const r = run(challenge, boat);
         expect(r.done).toBe(true);
-        expect(rank(r)).toHaveLength(6);
-        expect(new Set(rank(r)).size).toBe(6);
+        expect(rank(r)).toHaveLength(4);
+        expect(new Set(rank(r)).size).toBe(4);
         for (const p of r.racers) {
           expect(Number.isFinite(p.x)).toBe(true);
           expect(p.hull).toBeGreaterThanOrEqual(0);
@@ -61,14 +61,14 @@ it("paddling has cooldown and improves progress", () => {
   const a = createRace(
     "fastest",
     1,
-    Array(6).fill("bathtub"),
-    Array.from({ length: 6 }, () => []),
+    Array(4).fill("bathtub"),
+    Array.from({ length: 4 }, () => []),
   );
   const b = createRace(
     "fastest",
     1,
-    Array(6).fill("bathtub"),
-    Array.from({ length: 6 }, () => []),
+    Array(4).fill("bathtub"),
+    Array.from({ length: 4 }, () => []),
   );
   expect(action(a)).toBe(true);
   expect(action(a)).toBe(false);
@@ -95,8 +95,8 @@ it("all equipment remains finite in every challenge", () => {
     const r = createRace(
       "wobbly",
       7,
-      Array(6).fill("cardboard-box"),
-      Array.from({ length: 6 }, () => [item.id]),
+      Array(4).fill("cardboard-box"),
+      Array.from({ length: 4 }, () => [item.id]),
     );
     while (!r.done) stepRace(r);
     expect(
@@ -118,8 +118,8 @@ it("replays accepted action ticks to the same result", () => {
   const original = createRace(
     "fastest",
     89,
-    Array(6).fill("raft"),
-    Array.from({ length: 6 }, () => ["helpful-duck"]),
+    Array(4).fill("raft"),
+    Array.from({ length: 4 }, () => ["helpful-duck"]),
   );
   while (!original.done) {
     if (original.tick % 100 === 0) action(original);
@@ -128,8 +128,8 @@ it("replays accepted action ticks to the same result", () => {
   const replay = createRace(
     "fastest",
     89,
-    Array(6).fill("raft"),
-    Array.from({ length: 6 }, () => ["helpful-duck"]),
+    Array(4).fill("raft"),
+    Array.from({ length: 4 }, () => ["helpful-duck"]),
   );
   while (!replay.done) {
     if (original.actions.some((a) => a.tick === replay.tick)) action(replay);
